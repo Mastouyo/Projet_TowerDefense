@@ -1,3 +1,3 @@
-public class Tours{
+public class Tours extends Entites{
     
 }
