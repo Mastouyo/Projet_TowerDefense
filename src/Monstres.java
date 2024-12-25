@@ -1,8 +1,8 @@
-enum Element {Fire, Water, Wind, Earth}
+enum Element {Fire, Water, Wind, Earth, None}
 
 class Monstres extends Entites{
-    super(Entites);
-    
+    protected double speed;
+    protected int reward;
     public Monstres(){
         
     }
