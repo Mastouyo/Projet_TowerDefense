@@ -5,7 +5,7 @@ public class EarthBrute extends Monstres{
         this.atk = 5;
         this.atkspeed = 1;
         this.range  = 3;
-        this.elem = Element.Earth;
+        this.elem = new Element(Type.Earth);
         this.speed = 1;
         this.reward = 3;
     }

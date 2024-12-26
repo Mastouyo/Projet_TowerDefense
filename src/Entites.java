@@ -1,7 +1,7 @@
 abstract class Entites {
     protected String name;
-    protected int pdv;
-    protected int atk;
+    protected double pdv;
+    protected double atk;
     protected double atkspeed;
     protected double range;
     protected Element elem;
@@ -11,12 +11,12 @@ abstract class Entites {
         
     }
 
-    public int getPdv() {
+    public double getPdv() {
         return pdv;
     }
 
 
-    public int getAtk() {
+    public double getAtk() {
         return atk;
     }
 

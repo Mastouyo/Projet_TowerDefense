@@ -5,7 +5,7 @@ public class WaterBrute extends Monstres{
         this.atk = 5;
         this.atkspeed = 1;
         this.range  = 3;
-        this.elem = Element.Water;
+        this.elem = new Element(Type.Water);
         this.speed = 1;
         this.reward = 3;
     }

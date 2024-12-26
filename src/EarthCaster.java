@@ -5,7 +5,7 @@ public class EarthCaster extends Tours{
         this.atk = 7;
         this.atkspeed = 0.5;
         this.range = 2.5;
-        this.elem = Element.Earth;
+        this.elem = new Element(Type.Earth);
         this.cost = 100;
     }
 }

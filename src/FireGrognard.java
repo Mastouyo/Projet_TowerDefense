@@ -5,7 +5,7 @@ public class FireGrognard extends Monstres{
         this.atk = 7;
         this.atkspeed = 2;
         this.range  = 3;
-        this.elem = Element.Fire;
+        this.elem = new Element(Type.Fire);
         this.speed = 2;
         this.reward = 1;
     }

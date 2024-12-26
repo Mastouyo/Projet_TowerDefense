@@ -5,7 +5,7 @@ public class WindCaster extends Tours{
         this.atk = 5;
         this.atkspeed = 1.5;
         this.range = 6;
-        this.elem = Element.Wind;
+        this.elem = new Element(Type.Wind);
         this.cost = 50;
     }
 }

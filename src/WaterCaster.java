@@ -5,7 +5,7 @@ public class WaterCaster extends Tours{
         this.atk = 3;
         this.atkspeed = 1;
         this.range = 4;
-        this.elem = Element.Water;
+        this.elem = new Element(Type.Water);
         this.cost = 50;
     }
 }
