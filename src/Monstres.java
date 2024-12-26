@@ -5,4 +5,10 @@ abstract class Monstres extends Entites{
         
     }
 
+    private void recompense(){
+        if(this.estTué()){
+            //player.money +=reward;
+        }
+    }
+
 }
