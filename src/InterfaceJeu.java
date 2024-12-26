@@ -28,6 +28,8 @@ public class InterfaceJeu {
         zoneInfoJeu.dessineInfoJoueur();
         zoneInfoJoueur.dessineInfoJoueur();
         zoneCarte.dessineCarte();
+        zoneCarte.calculerTailleCases(50) ; 
+
         StdDraw.show();
     }
 
