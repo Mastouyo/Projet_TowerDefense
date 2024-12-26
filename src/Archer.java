@@ -1,4 +1,5 @@
-import java.math
+import java.lang.Math;
+import java.util.LinkedList;
 
 public class Archer extends Tours{
     
@@ -13,13 +14,15 @@ public class Archer extends Tours{
     }
 
     private Monstres cible(){
+        LinkedList<Monstres> monstreEnRange = new LinkedList();
         for(Monstres m : this.cibles){
             int x = m.position.getX();
             int y = m.position.getY();
-            if(maths.sqr(x*x + y*y) <= this.range){
-
+            if(Math.sqrt(x*x + y*y) <= this.range){
+                monstreEnRange.add(m);
             }
         }
+        return monstreEnRange.getLast();
     }
     
 }

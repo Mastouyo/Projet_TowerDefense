@@ -1,10 +1,11 @@
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 abstract class Tours extends Entites{
     protected int cost;
-    protected ArrayList<Monstres> cibles;
+    protected LinkedList<Monstres> cibles;
 
     public Tours(){
         
     }
+
 }
