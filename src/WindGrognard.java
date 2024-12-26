@@ -5,7 +5,7 @@ public class WindGrognard extends Monstres{
         this.atk = 7;
         this.atkspeed = 2;
         this.range  = 5;
-        this.elem = Element.Wind;
+        this.elem = new Element(Type.Wind);
         this.speed = 2;
         this.reward = 1;
     }

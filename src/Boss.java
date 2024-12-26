@@ -5,7 +5,7 @@ public class Boss extends Monstres{
         this.atk = 100;
         this.atkspeed = 10.0;
         this.range  = 2.0;
-        this.elem = Element.Fire;
+        this.elem = new Element(Type.Fire);
         this.speed = 0.5;
         this.reward = 100;
     }

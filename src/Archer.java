@@ -5,7 +5,7 @@ public class Archer extends Tours{
         this.atk = 5;
         this.atkspeed = 1;
         this.range = 2;
-        this.elem = elem.None;
+        this.elem = new Element(Type.None);
         this.cost = 20;
     }
 }

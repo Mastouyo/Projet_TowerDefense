@@ -1,5 +1,3 @@
-enum Element {Fire, Water, Wind, Earth, None}
-
 abstract class Entites {
     protected String name;
     protected int pdv;
@@ -7,6 +5,7 @@ abstract class Entites {
     protected double atkspeed;
     protected double range;
     protected Element elem;
+    protected Point2D position;
 
     public Entites (){
         

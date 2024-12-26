@@ -5,7 +5,7 @@ public class Minion extends Monstres{
         this.atk = 3;
         this.atkspeed = 0;
         this.range  = 0;
-        this.elem = Element.None;
+        this.elem = new Element(Type.None);
         this.speed = 1;
         this.reward = 1;
     }
