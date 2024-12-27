@@ -1,4 +1,8 @@
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileReader; 
+import java.io.IOException;
+
 
 public class ZoneCarte {
     public Point2D center = new Point2D(350,350);
@@ -9,26 +13,59 @@ public class ZoneCarte {
         // x et y : coordonées du centre du carré 
         int x = xy.getX();
         int y = xy.getY();
+        int t = taille/2 ; 
 
         StdDraw.setPenColor(couleur);
-        StdDraw.filledSquare(x, y, taille); 
+        StdDraw.filledSquare(x, y, t); 
 
         StdDraw.setPenColor(Color.BLACK);
-        StdDraw.line(x-taille, y-taille, x+taille, y-taille) ; 
-        StdDraw.line(x-taille, y-taille, x-taille, y+taille) ;
-        StdDraw.line(x+taille, y+taille, x+taille, y-taille) ; 
-        StdDraw.line(x+taille, y+taille, x-taille, y+taille) ;
+        StdDraw.line(x-t, y-t, x+t, y-t) ; 
+        StdDraw.line(x-t, y-t, x-t, y+t) ;
+        StdDraw.line(x+t, y+t, x+t, y-t) ; 
+        StdDraw.line(x+t, y+t, x-t, y+t) ;
     }
 
+    public int hauteurMap(String nomFichier) throws IOException{
+        int hauteur = 0;
 
-
-    public int calculerTailleCases(int nombreCases){
-       return 0 ;
+        try(BufferedReader br = new BufferedReader(new FileReader(nomFichier))) {
+            while (br.readLine() != null){
+                hauteur++; 
+            }
+        }
+        return hauteur; 
     }
+
+    public int largeurMap(String nomFichier) throws IOException{
+        int largeur = 0 ; 
+
+        try(BufferedReader br = new BufferedReader(new FileReader(nomFichier))){
+            String ligne = br.readLine();
+            if (ligne != null){
+                largeur = ligne.length() ; 
+            }
+        }
+
+        return largeur ; 
+    }
+
+    public int calculerTailleCases(String nomFichier) throws IOException{
+        int hauteurMap = hauteurMap(nomFichier) ; 
+        int largeurMap = largeurMap(nomFichier) ;
+
+       if (hauteurMap >= largeurMap){
+        return 700 / hauteurMap ; // 700 étant la taille du côté du carré de notre zone "Carte"
+       }
+       else {
+        return 700 / largeurMap ;
+       }
+    }
+
+    
 
 
     public void dessineTerrain(){
-        // Dessine toute les cases du terrain en fonction d'une map du dossier ressources. La fonction
+        // Dessine toute les cases du terrain en fonction d'une map du dossier ressources.
     } 
 
 
