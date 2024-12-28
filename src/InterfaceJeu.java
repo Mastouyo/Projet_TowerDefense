@@ -34,7 +34,7 @@ public class InterfaceJeu {
         int tailleCases = zoneCarte.calculerTailleCases(cheminMap1);
         System.out.println(tailleCases) ; 
 
-        Point2D test = new Point2D(35, 200);
+        Point2D test = new Point2D(35, 400);
         Point2D test2 = new Point2D(35+tailleCases, 200);
         Point2D test3 = new Point2D(35+tailleCases*2, 200);
         Point2D test4 = new Point2D(35+tailleCases*3, 200);

@@ -61,6 +61,25 @@ public class ZoneCarte {
        }
     }
 
+    public Point2D coordoneesDepart(String nomFichier) throws IOException{ 
+        // La fonction renvoie les coordonées du centre de la première case (en haut à gauche),
+        // en fonction du nombre de cases et de leurs disposition
+
+        // Coordonées point haut gauche = 
+
+        int tailleMap = 700; 
+        int tailleCases = calculerTailleCases(nomFichier) ; 
+        int largeurCarte = largeurMap(nomFichier) ; 
+
+
+        // |---|---------------|----|
+        // temp1     cases      temp1 
+        int temp1 = (700 - largeurCarte * tailleCases) / 2;  
+
+
+        return new Point2D(0, 0) ; 
+    }
+
     
 
 
