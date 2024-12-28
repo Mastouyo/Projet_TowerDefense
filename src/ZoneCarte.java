@@ -8,22 +8,6 @@ public class ZoneCarte {
     public Point2D center = new Point2D(350,350);
     public Point2D halfDist = new Point2D(350,350); 
     
-    public void dessineCase(Point2D xy, int taille, Color couleur){ 
-        // taille : largeur du carré 
-        // x et y : coordonées du centre du carré 
-        int x = xy.getX();
-        int y = xy.getY();
-        int t = taille/2 ; 
-
-        StdDraw.setPenColor(couleur);
-        StdDraw.filledSquare(x, y, t); 
-
-        StdDraw.setPenColor(Color.BLACK);
-        StdDraw.line(x-t, y-t, x+t, y-t) ; 
-        StdDraw.line(x-t, y-t, x-t, y+t) ;
-        StdDraw.line(x+t, y+t, x+t, y-t) ; 
-        StdDraw.line(x+t, y+t, x-t, y+t) ;
-    }
 
     public int hauteurMap(String nomFichier) throws IOException{
         int hauteur = 0;
@@ -74,7 +58,7 @@ public class ZoneCarte {
 
         // |---|---------------|----|
         // temp1     cases      temp1 
-        int temp1 = (700 - largeurCarte * tailleCases) / 2;  
+        int temp1 = (tailleMap - largeurCarte * tailleCases) / 2;  
 
 
         return new Point2D(0, 0) ; 
