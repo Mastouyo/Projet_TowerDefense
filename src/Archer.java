@@ -1,10 +1,11 @@
 import java.lang.Math;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class Archer extends Tours{
     
     public Archer(){
-    this.name = "Archer";
+        this.name = "Archer";
         this.pdv = 30;
         this.atk = 5;
         this.atkspeed = 1;
@@ -13,16 +14,23 @@ public class Archer extends Tours{
         this.cost = 20;
     }
 
+    // private Monstres cible(){
+    //     LinkedList<Monstres> monstreEnRange = new LinkedList();
+    //     for(Monstres m : this.cibles){
+    //         int x = m.position.getX();
+    //         int y = m.position.getY();
+    //         if(Math.sqrt(x*x + y*y) <= this.range){
+    //             monstreEnRange.add(m);
+    //         }
+    //     }
+    //     return monstreEnRange.getLast();
+    // }
+    
+
     private Monstres cible(){
-        LinkedList<Monstres> monstreEnRange = new LinkedList();
-        for(Monstres m : this.cibles){
-            int x = m.position.getX();
-            int y = m.position.getY();
-            if(Math.sqrt(x*x + y*y) <= this.range){
-                monstreEnRange.add(m);
-            }
-        }
-        return monstreEnRange.getLast();
+        return this.cibles.stream().filter(p->hypothénus(distance(p.position.getX(),this.position.getX()), distance(p.position.getY(),this.position.getY())) <= this.range).collect(Collectors.toCollection(LinkedList::new)).getLast();
+        
     }
+
     
 }

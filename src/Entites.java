@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Comparator;
+
 abstract class Entites {
     protected String name;
     protected double pdv;
@@ -6,7 +9,11 @@ abstract class Entites {
     protected double range;
     protected Element elem;
     protected Point2D position;
-
+   
+    public Point2D getPosition() {
+        return position;
+    }
+    
     public Entites (){
         
     }
@@ -36,5 +43,12 @@ abstract class Entites {
         return this.getPdv()==0;
     }
 
+    public double hypothénus(int x, int y){
+      return Math.sqrt(x*x + y*y);
+    }
 
+    public int distance(int x1, int x2){
+        return Math.abs(x1-x2);
+        
+    }
 }
