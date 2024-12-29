@@ -1,14 +1,14 @@
 import java.awt.Color;
-
+enum Types {
+    Spawn,
+    Base,
+    Route,
+    Constructible, 
+    Decor, 
+}
 public class Case {
    
-    enum Types {
-        Spawn,
-        Base,
-        Route,
-        Constructible, 
-        Decor, 
-    }
+    
 
     private Types type; // S = spawn, B = base, R = route, C = constructible, X = decor
     private int taille ;

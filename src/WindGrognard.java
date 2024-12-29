@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 public class WindGrognard extends Monstres{
     public WindGrognard(){
         this.name = "WindGrognard";
@@ -8,5 +10,9 @@ public class WindGrognard extends Monstres{
         this.elem = new Element(Type.Wind);
         this.speed = 2;
         this.reward = 1;
+    }
+
+    private Tours cible(){
+        return this.cibles.stream().filter(p->hypothénus(distance(p.position.getX(),this.position.getX()), distance(p.position.getY(),this.position.getY())) <= this.range).min(Comparator.comparingDouble(Tours::getPdv)).orElse(null);
     }
 }

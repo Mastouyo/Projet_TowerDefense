@@ -1,0 +1,107 @@
+file:///C:/Users/eliot/Documents/Université/L2/PO/PROJET/clone%20ntm/Projet_TowerDefense/src/InterfaceJeu.java
+### java.util.NoSuchElementException: next on empty iterator
+
+occurred in the presentation compiler.
+
+presentation compiler configuration:
+Scala version: 3.3.3
+Classpath:
+<HOME>\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala3-library_3\3.3.3\scala3-library_3-3.3.3.jar [exists ], <HOME>\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-library\2.13.12\scala-library-2.13.12.jar [exists ]
+Options:
+
+
+
+action parameters:
+uri: file:///C:/Users/eliot/Documents/Université/L2/PO/PROJET/clone%20ntm/Projet_TowerDefense/src/InterfaceJeu.java
+text:
+```scala
+import java.awt.Color;
+import java.io.IOException;
+
+
+public class InterfaceJeu {
+    
+    private ZoneInfoJeu zoneInfoJeu; 
+    private ZoneInfoJoueur zoneInfoJoueur; 
+    private ZoneBoutique zoneBoutique; 
+    private ZoneCarte zoneCarte; 
+    public Point2D center =new Point2D(500,350);
+    public Point2D halfDist= new Point2D(500,350);
+
+    public InterfaceJeu(){
+        //Création et affichage de la fenêtre de base 
+        StdDraw.setCanvasSize(1024, 720);
+        StdDraw.setXscale(-12, 1012);
+        StdDraw.setYscale(-10, 710);
+        StdDraw.enableDoubleBuffering();
+
+        zoneBoutique = new ZoneBoutique();
+        zoneCarte = new ZoneCarte();
+        zoneInfoJeu = new ZoneInfoJeu();
+        zoneInfoJoueur = new ZoneInfoJoueur();
+    }
+
+    public void afficheJeu() throws IOException{
+        zoneBoutique.dessineBoutique();
+        zoneInfoJeu.dessineInfoJoueur();
+        zoneInfoJoueur.dessineInfoJoueur();
+        zoneCarte.dessineCarte();
+
+        String cheminMap1 = "resources/maps/10-10.mtp" ;
+        int tailleCases = zoneCarte.calculerTailleCases(cheminMap1);
+        System.out.println(tailleCases) ; 
+
+        Point2D test = new Point2D(35, 400);
+        Point2D test2 = new Point2D(35+tailleCases, 200);
+        Point2D test3 = new Point2D(35+tailleCases*2, 200);
+        Point2D test4 = new Point2D(35+tailleCases*3, 200);
+        Point2D test5 = new Point2D(35+tailleCases*4, 200);
+        Point2D test6 = new Point2D(35+tailleCases*5, 200);
+        Point2D test7 = new Point2D(35+tailleCases*6, 200);
+        Point2D test8 = new Point2D(35+tailleCases*7, 200);
+        Point2D test9 = new Point2D(35+tailleCases*8, 200);
+        Point2D test10 = new Point2D(35+tailleCases*9, 200);
+
+        
+        zoneCarte.dessineCase(test, tailleCases, Color.GREEN);
+        zoneCarte.dessineCase(test2, tailleCases, Color.GREEN);
+        zoneCarte.dessineCase(test3, tailleCases, Color.GREEN);
+        zoneCarte.dessineCase(test4, tailleCases, Color.GREEN);
+        zoneCarte.dessineCase(test5, tailleCases, Color.GREEN);
+        zoneCarte.dessineCase(test6, tailleCases, Color.GREEN);
+        zoneCarte.dessineCase(test7, tailleCases, Color.GREEN);
+        zoneCarte.dessineCase(test8, tailleCases, Color.GREEN);
+        zoneCarte.dessineCase(test9, tailleCases, Color.GREEN);
+        zoneCarte.dessineCase(test10, tailleCases, Color.GREEN);
+
+
+        StdDraw.show();
+    }
+
+}
+
+```
+
+
+
+#### Error stacktrace:
+
+```
+scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
+	scala.collection.mutable.MutationTracker$CheckedIterator.next(MutationTracker.scala:76)
+	scala.collection.IterableOps.head(Iterable.scala:222)
+	scala.collection.IterableOps.head$(Iterable.scala:222)
+	scala.collection.AbstractIterable.head(Iterable.scala:933)
+	dotty.tools.dotc.interactive.InteractiveDriver.run(InteractiveDriver.scala:168)
+	scala.meta.internal.pc.MetalsDriver.run(MetalsDriver.scala:45)
+	scala.meta.internal.pc.PcCollector.<init>(PcCollector.scala:44)
+	scala.meta.internal.pc.PcSemanticTokensProvider$Collector$.<init>(PcSemanticTokensProvider.scala:61)
+	scala.meta.internal.pc.PcSemanticTokensProvider.Collector$lzyINIT1(PcSemanticTokensProvider.scala:61)
+	scala.meta.internal.pc.PcSemanticTokensProvider.Collector(PcSemanticTokensProvider.scala:61)
+	scala.meta.internal.pc.PcSemanticTokensProvider.provide(PcSemanticTokensProvider.scala:90)
+	scala.meta.internal.pc.ScalaPresentationCompiler.semanticTokens$$anonfun$1(ScalaPresentationCompiler.scala:110)
+```
+#### Short summary: 
+
+java.util.NoSuchElementException: next on empty iterator
