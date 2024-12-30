@@ -4,7 +4,7 @@ public class App {
         /*Game g = new Game () ;
         g . launch () ;*/
 
-       InterfaceJeu test = new InterfaceJeu();
-       test.afficheJeu();
+        InterfaceJeu test = new InterfaceJeu();
+        test.afficheJeu();
     }
 }

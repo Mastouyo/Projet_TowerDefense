@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.stream.Collectors;
+
 public class Minion extends Monstres{
     public Minion(){
         this.name = "Minion";
@@ -8,5 +11,9 @@ public class Minion extends Monstres{
         this.elem = new Element(Type.None);
         this.speed = 1;
         this.reward = 1;
+    }
+
+    private Tours cible(){
+        return null;
     }
 }

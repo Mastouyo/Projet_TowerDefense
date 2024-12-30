@@ -39,9 +39,7 @@ public class InterfaceJeu {
         */ 
 
         Point2D test = new Point2D(50, 50) ; 
-        Case testCase = new Case(Types.Spawn, 50, test) ;
-        
-
+        Case testCase = new Case(Types.Spawn, 50, test);
 
         StdDraw.show();
     }

@@ -468,6 +468,11 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 {
 
 	/**
+	 * The color gold.
+	 */
+	public static final Color GOLD = new Color(255, 215, 0) ;
+
+	/**
 	 * The color black.
 	 */
 	public static final Color BLACK = Color.BLACK;

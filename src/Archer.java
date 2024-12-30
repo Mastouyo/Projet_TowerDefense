@@ -1,4 +1,3 @@
-import java.lang.Math;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -28,8 +27,13 @@ public class Archer extends Tours{
     
 
     private Monstres cible(){
-        return this.cibles.stream().filter(p->hypothénus(distance(p.position.getX(),this.position.getX()), distance(p.position.getY(),this.position.getY())) <= this.range).collect(Collectors.toCollection(LinkedList::new)).getLast();
-        
+        LinkedList<Monstres> monstresEnRange = this.cibles.stream().filter(p->hypothénus(distance(p.position.getX(),this.position.getX()), distance(p.position.getY(),this.position.getY())) <= this.range).collect(Collectors.toCollection(LinkedList::new));
+        if(monstresEnRange.isEmpty()){
+            return null;
+        }
+        else{
+            return monstresEnRange.getLast();
+        }
     }
 
     

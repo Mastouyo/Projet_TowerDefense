@@ -1,6 +1,3 @@
-import java.util.LinkedList;
-import java.util.Comparator;
-
 abstract class Entites {
     protected String name;
     protected double pdv;

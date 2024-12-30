@@ -43,4 +43,8 @@ public class Case {
         StdDraw.line(x+t, y+t, x+t, y-t) ; 
         StdDraw.line(x+t, y+t, x-t, y+t) ;
     }
+
+    public Types getBase(){
+        return this.type.Base;
+    }
 }
