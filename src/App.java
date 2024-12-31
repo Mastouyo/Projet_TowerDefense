@@ -6,5 +6,7 @@ public class App {
 
         InterfaceJeu test = new InterfaceJeu();
         test.afficheJeu();
+        
     }
 }
+    

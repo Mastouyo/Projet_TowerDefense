@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader; 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class ZoneCarte {
@@ -45,6 +46,7 @@ public class ZoneCarte {
        }
     }
 
+    /* 
     public Point2D coordoneesDepart(String nomFichier) throws IOException{ 
         // La fonction renvoie les coordonées du centre de la première case (en haut à gauche),
         // en fonction du nombre de cases et de leurs disposition
@@ -63,14 +65,40 @@ public class ZoneCarte {
 
         return new Point2D(0, 0) ; 
     }
+        */
 
-    
+    public void dessineCase(Case c){
+        int x = c.getCentre().getX() ; 
+        int y = c.getCentre().getY() ; 
+        int t = c.getTaille() / 2 ; 
+
+        switch (c.getType()) {
+            case Spawn : StdDraw.setPenColor(Color.RED);
+            case Base : StdDraw.setPenColor(Color.ORANGE) ; 
+            case Route : StdDraw.setPenColor(194, 178, 128) ; 
+            case Constructible : StdDraw.setPenColor(Color.LIGHT_GRAY);
+            case Non_Constructible : StdDraw.setPenColor(11, 102, 35);
+        }
+        
+        StdDraw.filledSquare(x, y, t);
+
+        StdDraw.setPenColor(Color.BLACK);
+        StdDraw.line(x-t, y-t, x+t, y-t) ; 
+        StdDraw.line(x-t, y-t, x-t, y+t) ;
+        StdDraw.line(x+t, y+t, x+t, y-t) ; 
+        StdDraw.line(x+t, y+t, x-t, y+t) ;
+    }
 
 
-    public void dessineTerrain(){
-        // Dessine toute les cases du terrain en fonction d'une map du dossier ressources.
-    } 
+    public void dessineTerrain(String chemin) throws IOException {
+        Carte carte = new Carte(chemin) ; 
 
+        for (int i = 0; i < hauteurMap(carte.getChemin()); i ++){
+            for (int j = 0; j < largeurMap(carte.getChemin()); j ++){
+                dessineCase(carte.getElement(i, j)); 
+            }
+        } 
+    }    
 
     public void dessineCarte(){
         StdDraw.setPenColor(Color.BLACK);

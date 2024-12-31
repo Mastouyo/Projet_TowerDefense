@@ -32,14 +32,9 @@ public class InterfaceJeu {
         zoneInfoJoueur.dessineInfoJoueur();
         zoneCarte.dessineCarte();
 
-        /* 
-        String cheminMap1 = "resources/maps/10-10.mtp" ;
-        int tailleCases = zoneCarte.calculerTailleCases(cheminMap1);
-        System.out.println(tailleCases) ; 
-        */ 
-
-        Point2D test = new Point2D(50, 50) ; 
-        Case testCase = new Case(Types.Spawn, 50, test);
+        String chemin = "resources/maps/5-8.mtp" ; 
+        zoneCarte.dessineTerrain(chemin);
+       
 
         StdDraw.show();
     }
