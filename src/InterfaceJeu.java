@@ -32,7 +32,7 @@ public class InterfaceJeu {
         zoneInfoJoueur.dessineInfoJoueur();
         zoneCarte.dessineCarte();
 
-        String chemin = "resources/maps/10-10.mtp" ; 
+        String chemin = "resources/maps/5-8.mtp" ; 
         zoneCarte.dessineTerrain(chemin);
        
 
