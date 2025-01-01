@@ -8,5 +8,9 @@ abstract class Monstres extends Entites{
         
     }
 
+    private void drawVisuel(Tours t, Point2D p, double taille){
+        StdDraw . setPenColor ( this.elem.getCouleur());
+        StdDraw . filledCircle( p . getX ()-120 , p . getY () , taille );
+    }
 
 }

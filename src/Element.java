@@ -27,7 +27,7 @@ public class Element {
             this.resistance = Type.Water;
             this.faiblesse.add(Type.Earth);
         }
-        else if(element == Type.Wind){
+        else if(element == Type.Water){
             this.couleur = new  Color(6, 0, 160);
             this.resistance = Type.Fire;
             this.faiblesse.add(Type.Wind);

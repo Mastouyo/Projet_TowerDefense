@@ -35,6 +35,5 @@ public class Archer extends Tours{
             return monstresEnRange.getLast();
         }
     }
-
     
 }
