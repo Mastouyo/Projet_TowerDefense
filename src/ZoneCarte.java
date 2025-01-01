@@ -104,5 +104,4 @@ public class ZoneCarte {
         StdDraw.setPenColor(Color.BLACK);
         StdDraw.rectangle(center.getX(), center.getY(), halfDist.getX(), halfDist.getY());
     }
-
 }
