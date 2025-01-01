@@ -71,14 +71,13 @@ public class ZoneCarte {
         int x = c.getCentre().getX() ; 
         int y = c.getCentre().getY() ; 
         int t = c.getTaille() / 2 ; 
+        TypesCases type = c.getType() ; 
 
-        switch (c.getType()) {
-            case Spawn : StdDraw.setPenColor(Color.RED);
-            case Base : StdDraw.setPenColor(Color.ORANGE) ; 
-            case Route : StdDraw.setPenColor(194, 178, 128) ; 
-            case Constructible : StdDraw.setPenColor(Color.LIGHT_GRAY);
-            case Non_Constructible : StdDraw.setPenColor(11, 102, 35);
-        }
+        if (type == TypesCases.Spawn){ StdDraw.setPenColor(Color.RED);}
+        else if (type == TypesCases.Base){ StdDraw.setPenColor(Color.ORANGE);}
+        else if (type == TypesCases.Route){ StdDraw.setPenColor(194, 178, 127);}
+        else if (type == TypesCases.Constructible){ StdDraw.setPenColor(Color.LIGHT_GRAY);}
+        else { StdDraw.setPenColor(11, 102, 35);}
         
         StdDraw.filledSquare(x, y, t);
 
@@ -95,6 +94,10 @@ public class ZoneCarte {
 
         for (int i = 0; i < hauteurMap(carte.getChemin()); i ++){
             for (int j = 0; j < largeurMap(carte.getChemin()); j ++){
+                
+                // Print pour vérifier la lecture des cases (visiblement correct)
+                System.out.println(carte.getElement(i, j).toString());
+                
                 dessineCase(carte.getElement(i, j)); 
             }
         } 

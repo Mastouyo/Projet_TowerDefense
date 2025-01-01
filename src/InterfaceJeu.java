@@ -30,10 +30,10 @@ public class InterfaceJeu {
         zoneBoutique.dessineBoutique();
         zoneInfoJeu.dessineInfoJoueur();
         zoneInfoJoueur.dessineInfoJoueur();
-        //zoneCarte.dessineCarte();
+        zoneCarte.dessineCarte();
 
-        //String chemin = "resources/maps/5-8.mtp" ; 
-        //zoneCarte.dessineTerrain(chemin);
+        String chemin = "resources/maps/10-10.mtp" ; 
+        zoneCarte.dessineTerrain(chemin);
        
 
         StdDraw.show();

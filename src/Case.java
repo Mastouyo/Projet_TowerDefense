@@ -27,4 +27,9 @@ public class Case {
     public int getTaille(){
         return this.taille ; 
     }
+
+    @Override
+    public String toString(){
+        return "(" + this.type + ", " + "(" + this.centre.getX() + "," + this.centre.getY() + "))" ; 
+    }
 }
