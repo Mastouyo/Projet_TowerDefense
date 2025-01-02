@@ -1,8 +1,3 @@
-import java.awt.Color;
-
-
-
-
 public class Case {
     private TypesCases type; // S = spawn, B = base, R = route, C = constructible, X = decor
     private int taille ;

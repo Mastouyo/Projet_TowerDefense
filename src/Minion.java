@@ -1,6 +1,3 @@
-import java.util.LinkedList;
-import java.util.stream.Collectors;
-
 public class Minion extends Monstres{
     public Minion(){
         this.name = "Minion";

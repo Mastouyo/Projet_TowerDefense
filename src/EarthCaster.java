@@ -1,6 +1,4 @@
 import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.stream.Collectors;
 
 public class EarthCaster extends Tours{
     public EarthCaster(){

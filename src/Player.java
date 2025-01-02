@@ -11,11 +11,11 @@ public class Player {
         return this.pdv==0;
     }
 
-    // private void takeDamage(Monstres m){
-    //     if(m.position == "Base"){
-    //         this.pdv -=m.attack;
-    //     }
-    // }
+    private void takeDamage(Monstres m, Point2D base){
+         if(m.position == base){
+            this.pdv -=m.getAtk();
+         }
+     }
 
     
     private void recompense(Monstres m){
@@ -36,6 +36,5 @@ public class Player {
     public int getMoney() {
         return money;
     }
-
     //faire une fonction pour construire des tours (trouver comment avoir la position de la souris)
 }
