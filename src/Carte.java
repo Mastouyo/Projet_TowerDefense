@@ -106,4 +106,27 @@ public class Carte extends ZoneCarte  {
         // Afficher la carte sous forme de chaîne
         System.out.println(carteString.toString());
     }    
+
+    public Point2D getSpawn(){
+        for (ArrayList<Case> ligne : carte){
+            for (Case c : ligne){
+                if (c.getType() == TypesCases.Spawn){
+                    return c.getCentre() ; 
+                }
+            }
+        }
+        return new Point2D(-1, -1) ; 
+    }
+
+    public Point2D getBase(){
+        for (ArrayList<Case> ligne : carte){
+            for (Case c : ligne) {
+                if (c.getType() == TypesCases.Base){
+                    return c.getCentre() ; 
+                }
+            }
+        }
+        return new Point2D(-1, -1) ; 
+    }
+
 }

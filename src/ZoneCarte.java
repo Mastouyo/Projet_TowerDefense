@@ -89,14 +89,12 @@ public class ZoneCarte {
     }
 
 
-    public void dessineTerrain(String chemin) throws IOException {
-        Carte carte = new Carte(chemin) ; 
-
+    public void dessineTerrain(Carte carte) throws IOException {
         for (int i = 0; i < hauteurMap(carte.getChemin()); i ++){
             for (int j = 0; j < largeurMap(carte.getChemin()); j ++){
                 
                 // Print pour vérifier la lecture des cases (visiblement correct)
-                System.out.println(carte.getElement(i, j).toString());
+                // System.out.println(carte.getElement(i, j).toString());
                 
                 dessineCase(carte.getElement(i, j)); 
             }
