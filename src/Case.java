@@ -9,6 +9,8 @@ public class Case {
     private Point2D centre; // centre de la case 
     private boolean libre; // Si une tour occupe ou non la case (par défaut libre)
 
+    
+
     public Case(TypesCases type, int taille, Point2D centre){
         this.type = type ;
         this.taille = taille ; 
@@ -26,6 +28,18 @@ public class Case {
 
     public int getTaille(){
         return this.taille ; 
+    }
+
+    public boolean getLibre(){
+        return this.libre ; 
+    }
+
+    public void setLibreFalse(){
+        this.libre = false ; 
+    }
+
+    public void setLibreTrue(){
+        this.libre = true ; 
     }
 
     @Override

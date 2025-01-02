@@ -32,10 +32,15 @@ public class InterfaceJeu {
         zoneInfoJoueur.dessineInfoJoueur();
         zoneCarte.dessineCarte();
 
-        String chemin = "resources/maps/10-10.mtp" ; 
-        zoneCarte.dessineTerrain(chemin);
+        String chemin = "resources/maps/5-8.mtp" ; 
+        Carte carte = new Carte(chemin) ; 
 
+        Point2D spawn = carte.getSpawn();
+        int spawnX = spawn.getX() ; 
+        int spawnY = spawn.getY() ; 
+        System.out.println("(" + spawnX + "," + spawnY + ")");
 
+        zoneCarte.dessineTerrain(carte);
         
         StdDraw.show();
     }

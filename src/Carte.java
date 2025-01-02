@@ -9,6 +9,7 @@ public class Carte extends ZoneCarte  {
     private String chemin ;
     private int tailleCase; 
     private ArrayList<ArrayList<Case>> carte ; 
+    private ArrayList<Case> casesConstructbiles ; 
 
     private int largeur = 350 ; 
     private int hauteur = 350 ;
@@ -19,6 +20,7 @@ public class Carte extends ZoneCarte  {
         this.chemin = chemin ;  
         this.tailleCase = calculerTailleCases(chemin) ;  
         this.carte = chargerCarte();
+        this.casesConstructbiles = initListeCasesConstructibles() ; 
     }
 
     public String getChemin(){
@@ -106,6 +108,28 @@ public class Carte extends ZoneCarte  {
         // Afficher la carte sous forme de chaîne
         System.out.println(carteString.toString());
     }    
+
+    private ArrayList<Case> initListeCasesConstructibles(){
+        ArrayList<Case> casesConstructibles = new ArrayList<>() ; 
+        for (ArrayList<Case> ligne : carte){
+            for (Case c : ligne){
+                if (c.getType() == TypesCases.Constructible){
+                    casesConstructibles.add(c) ; 
+                }
+            }
+        }
+        return casesConstructibles ; 
+    }
+
+    public void ajouterCaseConstructible(Case c){
+        c.setLibreTrue();
+        this.casesConstructbiles.add(c) ; 
+    }
+
+    public void retirerCaseConstructible(Case c){
+        c.setLibreFalse();
+        this.casesConstructbiles.remove(c) ; 
+    }
 
     public Point2D getSpawn(){
         for (ArrayList<Case> ligne : carte){
