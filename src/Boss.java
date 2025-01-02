@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class Boss extends Monstres{
-    public Boss(){
+    public Boss(Case position){
         this.name = "Boss";
         this.pdv = 150;
         this.atk = 100;
@@ -11,6 +11,7 @@ public class Boss extends Monstres{
         this.elem = new Element(Type.Fire);
         this.speed = 0.5;
         this.reward = 100;
+        //this.position 
     }
     
     private Tours cible(){

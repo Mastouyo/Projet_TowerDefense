@@ -46,8 +46,8 @@ public class ZoneBoutique {
         StdDraw.setPenColor(Color.BLACK);
         Font font = new Font("sans serif", Font.PLAIN, 10);
         StdDraw.setFont(font);
-        StdDraw.text(p.getX()-55,p.getY()+5, "PV : " + String.valueOf(t.getPdv() + " | ATK : " + String.valueOf(t.getAtk())));
-        StdDraw.text(p.getX()-55,p.getY()-5, "SPD : " + String.valueOf(t.getAtkspeed() + " | RA : " + String.valueOf(t.getRange())));
-        StdDraw.text(p.getX()-55,p.getY()-15, "Cost : " + String.valueOf(t.getCost()));
+        StdDraw.text(p.getX()-55,p.getY()+10, "PV : " + String.valueOf(t.getPdv() + " | ATK : " + String.valueOf(t.getAtk())));
+        StdDraw.text(p.getX()-55,p.getY(), "SPD : " + String.valueOf(t.getAtkspeed() + " | RA : " + String.valueOf(t.getRange())));
+        StdDraw.text(p.getX()-55,p.getY()-10, "Cost : " + String.valueOf(t.getCost()));
     }
 }

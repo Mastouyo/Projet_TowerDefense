@@ -65,7 +65,7 @@ public class Carte extends ZoneCarte  {
 
 
                     int offsetX = ((x * tailleCase) - (ligne.length() * tailleCase) / 2) + 35 ;
-                    int offsetY = (y * tailleCase) - (ligne.length() * tailleCase) / 2;
+                    int offsetY = ((y * tailleCase) - (ligne.length() * tailleCase) / 2) + 35;
 
                     Point2D centre = new Point2D(mapCenter.getX() + offsetX, mapCenter.getY() - offsetY);
                     // Point2D centre = new Point2D(x * tailleCase, y * tailleCase); // Calcul des coordonnées du centre

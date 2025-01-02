@@ -2,8 +2,6 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader; 
 import java.io.IOException;
-import java.util.ArrayList;
-
 
 public class ZoneCarte {
     public Point2D center = new Point2D(350,350);
