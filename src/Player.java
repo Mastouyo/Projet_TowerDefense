@@ -7,25 +7,23 @@ public class Player {
         this.money = 50;
     }
 
-    private boolean aPerdu(){
+    public boolean aPerdu(){
         return this.pdv==0;
     }
 
-    private void takeDamage(Monstres m, Point2D base){
-         if(m.position == base){
-            this.pdv -=m.getAtk();
-         }
+    public void takeDamage(Monstres m){
+        this.pdv -=m.getAtk();
      }
 
     
-    private void recompense(Monstres m){
+    public void recompense(Monstres m){
         if(m.estTué()){
             this.money +=m.reward;
         }
     }
 
     //faire une fonction pour achter la tour seulement si le cout est inferieur ou egal a l'argent.
-    private void depenseTour(Tours t){
+    public void depenseTour(Tours t){
         this.money -= t.cost;
     }
 
