@@ -3,9 +3,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Game {
-    
-        private Player player;
-        private LinkedList<Monstres> Monstres;
+    private Player player; // Le joueur
+    private LinkedList<Monstres> monstres; // Liste des monstres actifs
+    private List<Wave> waves; // Liste des vagues à affronter
+    private int currentWaveIndex; // Index de la vague en cours
+    private boolean gameRunning;
 
     public void launch() {
         init();
@@ -19,31 +21,35 @@ public class Game {
     }
     
     private boolean isGameRunning() {
-        // Exemple de conditions pour arrêter le jeu
-        if (this.player.aPerdu()) { // Si les points de vie du joueur sont à 0
+        if (player.aPerdu()) {
             System.out.println("Défaite !");
             return false;
-        } 
-        if (allEnemiesDead() && isLastWaveComplete()) { // Si tous les ennemis sont morts et toutes les vagues terminées
+        }
+        if (allEnemiesDead() && isLastWaveComplete()) {
             System.out.println("Victoire !");
             return false;
         }
-        return true; // Continuer à jouer
+        return gameRunning;
     }
     
     // Fonction simulant la vérification de la fin des vagues et des ennemis
     private boolean allEnemiesDead() {
-        LinkedList<Monstres> potMonstres = Monstres.stream().filter(p->p!=null).collect(Collectors.toCollection(LinkedList::new));
-        return potMonstres.isEmpty();
+        return monstres.stream().noneMatch(monstre -> monstre.isAlive());
     }
     
     private boolean isLastWaveComplete() {
-        // Implémentez une logique pour vérifier si la dernière vague est terminée.
-        return true; // Exemple fictif
+        return currentWaveIndex >= waves.size();
     }
     
     private void init() {
-        // Initialisation du jeu
+        System.out.println("Initialisation du jeu...");
+        player = new Player(); 
+        monstres = new LinkedList<>();
+        waves = loadWaves(); // Charger les vagues du jeu
+        currentWaveIndex = 0;
+        gameRunning = true;
+
+        startNextWave(); // Démarrer la première vague
     }
     
     private void update(double deltaTimeSec) {

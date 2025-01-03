@@ -3,8 +3,8 @@ public class App {
         
         /*Game g = new Game () ;
         g . launch () ;*/
-
-        InterfaceJeu test = new InterfaceJeu();
+        Player player = new Player();
+        InterfaceJeu test = new InterfaceJeu(player);
         test.afficheJeu();
         
     }

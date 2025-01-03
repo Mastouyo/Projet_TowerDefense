@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class Boss extends Monstres{
-    public Boss(Case position){
+    public Boss(){
         this.name = "Boss";
         this.pdv = 150;
         this.atk = 100;

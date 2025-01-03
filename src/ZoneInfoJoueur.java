@@ -5,10 +5,13 @@ import java.awt.Font;
 public class ZoneInfoJoueur{
     private Point2D center = new Point2D(856, 641);
     private Point2D halfDist = new Point2D(144,25);
-    private Player joueur;
+    private Player player;
+
+    public ZoneInfoJoueur (Player player){
+        this.player = player;
+    }
 
     public void dessineInfoJoueur(){
-        this.joueur = new Player();
         StdDraw.setPenColor(Color.BLACK);
         StdDraw.rectangle(center.getX(), center.getY(), halfDist.getX(), halfDist.getY());
 
@@ -17,11 +20,11 @@ public class ZoneInfoJoueur{
         StdDraw . setPenColor ( new Color (212 , 175 ,55) ); //met le pinceau en doré
         Font font = new Font("sans serif", Font.PLAIN, 20);
         StdDraw.setFont(font);
-        StdDraw.text(center.getX()-80, center.getY(),String.valueOf(joueur.getMoney()));
+        StdDraw.text(center.getX()-80, center.getY(),String.valueOf(player.getMoney()));
 
         //vie du joueur
         drawHeart(15 );
-        StdDraw.text(center.getX()+80, center.getY(),String.valueOf(joueur.getPdv()));
+        StdDraw.text(center.getX()+80, center.getY(),String.valueOf(player.getPdv()));
     }
 
     public void drawCoin( double radius) {

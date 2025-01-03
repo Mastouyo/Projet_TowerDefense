@@ -1,11 +1,6 @@
-import java.awt.Color;
 import java.io.IOException;
 
-
-
-
 public class InterfaceJeu {
-    
     private ZoneInfoJeu zoneInfoJeu; 
     private ZoneInfoJoueur zoneInfoJoueur; 
     private ZoneBoutique zoneBoutique; 
@@ -13,7 +8,7 @@ public class InterfaceJeu {
     public Point2D center =new Point2D(500,350);
     public Point2D halfDist= new Point2D(500,350);
 
-    public InterfaceJeu(){
+    public InterfaceJeu(Player player){
         //Création et affichage de la fenêtre de base 
         StdDraw.setCanvasSize(1024, 720);
         StdDraw.setXscale(-12, 1012);
@@ -23,7 +18,7 @@ public class InterfaceJeu {
         zoneBoutique = new ZoneBoutique();
         zoneCarte = new ZoneCarte();
         zoneInfoJeu = new ZoneInfoJeu();
-        zoneInfoJoueur = new ZoneInfoJoueur();
+        zoneInfoJoueur = new ZoneInfoJoueur(player);
     }
 
     public void afficheJeu() throws IOException{

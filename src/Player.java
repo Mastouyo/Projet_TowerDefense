@@ -22,9 +22,29 @@ public class Player {
         }
     }
 
-    //faire une fonction pour achter la tour seulement si le cout est inferieur ou egal a l'argent.
-    public void depenseTour(Tours t){
-        this.money -= t.cost;
+    // Achète une tour si le joueur a assez d'argent
+    public boolean acheterTour(Tours t) {
+        if (this.money >= t.getCost()) {
+            this.money -= t.getCost();
+            return true; // Achat réussi
+        } else {
+            System.out.println("Pas assez d'argent pour acheter cette tour !");
+            return false; // Achat échoué
+        }
+    }
+
+    public boolean construireTour(Tours t, Point2D position, Carte carte) {
+        if (acheterTour(t)) { // Vérifie si l'achat est possible
+            if (carte.placerTour(t, position)) { // Vérifie si la position est constructible
+                System.out.println("Tour placée en " + position);
+                return true;
+            } else {
+                System.out.println("Impossible de placer une tour ici !");
+                this.money += t.getCost(); // Rembourse l'argent si placement échoué
+                return false;
+            }
+        }
+        return false;
     }
 
     public int getPdv() {
@@ -34,5 +54,12 @@ public class Player {
     public int getMoney() {
         return money;
     }
-    //faire une fonction pour construire des tours (trouver comment avoir la position de la souris)
+    
+     // Rendu graphique des informations du joueur
+     public void render() {
+        StdDraw.setPenColor(StdDraw.RED);
+        StdDraw.text(100, 650, "PdV : " + this.pdv);
+        StdDraw.setPenColor(StdDraw.YELLOW);
+        StdDraw.text(100, 600, "Money : " + this.money);
+    }
 }
