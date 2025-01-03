@@ -1,5 +1,7 @@
 import java.awt.Color;
 
+import java.awt.Font;
+
 public class ZoneInfoJoueur{
     private Point2D center = new Point2D(856, 641);
     private Point2D halfDist = new Point2D(144,25);
@@ -13,6 +15,8 @@ public class ZoneInfoJoueur{
         //argent du joueur
         drawCoin(15);
         StdDraw . setPenColor ( new Color (212 , 175 ,55) ); //met le pinceau en doré
+        Font font = new Font("sans serif", Font.PLAIN, 20);
+        StdDraw.setFont(font);
         StdDraw.text(center.getX()-80, center.getY(),String.valueOf(joueur.getMoney()));
 
         //vie du joueur
