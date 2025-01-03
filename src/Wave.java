@@ -3,6 +3,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Wave {
+    private int waveNumber;
     private List<EnemySpawn> enemySpawns; // Liste des ennemis à générer
     private double currentTime; // Temps écoulé dans la vague
     private boolean completed; // Indique si la vague est terminée
@@ -19,7 +20,8 @@ public class Wave {
         }
     }
 
-    public Wave() {
+    public Wave(int waveNumber) {
+        this.waveNumber = waveNumber;
         this.enemySpawns = new ArrayList<>();
         this.currentTime = 0;
         this.completed = false;
@@ -93,6 +95,15 @@ public class Wave {
     // Retourne les monstres actifs
     public LinkedList<Monstres> getActiveMonsters() {
         return activeMonsters;
+    }
+
+     // Ajoute manuellement un spawn d'ennemi à la vague (utile pour les vagues dynamiques)
+    public void addEnemySpawn(double spawnTime, String enemyType) {
+        enemySpawns.add(new EnemySpawn(spawnTime, enemyType));
+    }
+
+    public int getWaveNumber() {
+        return waveNumber;
     }
 }
 

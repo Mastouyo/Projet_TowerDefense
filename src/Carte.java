@@ -1,30 +1,33 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList; 
+import java.util.ArrayList;
+import java.util.Queue; 
+import java.util.LinkedList;
 
 
 public class Carte extends ZoneCarte  {
     
-    private String chemin ;
+    private String Fichier ;
     private int tailleCase; 
     private ArrayList<ArrayList<Case>> carte ; 
     private ArrayList<Case> casesConstructbiles ; 
+    private ArrayList<Case> chemin ; 
 
     private int largeur = 350 ; 
     private int hauteur = 350 ;
     private Point2D mapCenter = new Point2D(largeur, hauteur) ; 
 
 
-    public Carte (String chemin) throws IOException{
-        this.chemin = chemin ;  
-        this.tailleCase = calculerTailleCases(chemin) ;  
+    public Carte (String Fichier) throws IOException{
+        this.Fichier = Fichier ;  
+        this.tailleCase = calculerTailleCases(Fichier) ;  
         this.carte = chargerCarte();
         this.casesConstructbiles = initListeCasesConstructibles() ; 
     }
 
     public String getChemin(){
-        return this.chemin ; 
+        return this.Fichier ; 
     }
 
     public Case getElement(int i, int j){
@@ -49,7 +52,7 @@ public class Carte extends ZoneCarte  {
     }
 
     public ArrayList<ArrayList<Case>> chargerCarte() throws IOException {
-        String cheminFichier = this.chemin ; 
+        String cheminFichier = this.Fichier ; 
         ArrayList<ArrayList<Case>> carte = new ArrayList<>();
         int y = 0;  // Coordonnée Y de la case (on incrémente pour chaque ligne)
 
@@ -153,4 +156,105 @@ public class Carte extends ZoneCarte  {
         return new Point2D(-1, -1) ; 
     }
 
+    // FONCTIONNE 
+    public Case getCaseSpawn(){
+        for (ArrayList<Case> ligne : carte){
+            for (Case c : ligne){
+                if (c.getType() == TypesCases.Spawn){
+                    return c; 
+                }
+            }
+        }
+        return null ; 
+    }
+
+    // FONCTIONNE
+    public Case getCaseBase(){
+        for (ArrayList<Case> ligne : carte){
+            for (Case c : ligne){
+                if (c.getType() == TypesCases.Base){
+                    return c; 
+                }
+            }
+        }
+        return null ; 
+    }
+
+    // Renvoie la case aux indices i et j dans la liste de liste Carte
+    // FONCTIONNE
+    public Case caseSelonIndices(int i, int j){
+        if ((i < 0) || (j < 0)){ return null; }
+        return this.carte.get(i).get(j) ; 
+    }
+
+    // Renvoie les indices dans la list de liste carte de la case C
+    // FONCTIONNE
+    public Point2D positionDansLaCarte(Case c){
+        for (int i = 0 ; i < this.carte.size(); i ++){
+            if (this.carte.get(i).contains(c)){
+                return new Point2D (i , this.carte.get(i).indexOf(c)) ; 
+            }
+        }
+        return null ;    
+    }
+
+    
+    public Case prochaineCase(Case c, ArrayList<Case> queue){
+        int positionI = positionDansLaCarte(c).getX() ; 
+        int positionJ = positionDansLaCarte(c).getY() ; 
+
+        // Case au dessus 
+        Case cUP = caseSelonIndices(positionI - 1, positionJ);
+        Case cRIGHT = caseSelonIndices(positionI, positionJ + 1);
+        Case cDOWN = caseSelonIndices(positionI + 1, positionJ);
+        Case cLEFT = caseSelonIndices(positionI, positionJ - 1);
+
+
+
+
+        if (((cUP.getType() == TypesCases.Route) || (cUP.getType() == TypesCases.Base)) &&  
+        (queue.contains(cUP) == false)){
+            return cUP; }
+        
+
+        // Case à droite 
+        else if (((cRIGHT.getType() == TypesCases.Route) || (cRIGHT.getType() == TypesCases.Base)) &&  
+        (queue.contains(cRIGHT) == false)){
+            return cRIGHT; 
+        }
+
+         // Case en bas
+         else if (((cDOWN.getType() == TypesCases.Route) || (cDOWN.getType() == TypesCases.Base)) &&  
+         (queue.contains(cDOWN) == false)){
+             return cDOWN;
+         }
+
+         // Case à gauche
+         else if (((cLEFT.getType() == TypesCases.Route) || (cLEFT.getType() == TypesCases.Base)) &&  
+         (queue.contains(cLEFT) == false)){
+             return cLEFT;
+         }
+
+         else { return null ; }
+    }
+
+    public ArrayList<Case> initChemin(){
+        ArrayList<Case> cheminMonstres = new ArrayList<Case>() ;
+        
+        Case courant = getCaseSpawn() ; 
+        cheminMonstres.add(courant) ; 
+
+        while (cheminMonstres.contains(getCaseBase()) == false ) {
+            courant = prochaineCase(courant, cheminMonstres) ;
+            cheminMonstres.add(courant) ;
+        }
+        return cheminMonstres ;
+    }
+
+    public void afficheChemin (ArrayList<Case> chemin){
+        for (int i = 0 ; i < chemin.size() ; i ++){
+            System.out.println(chemin.get(i).toString()) ; 
+        }
+    }
+    
 }

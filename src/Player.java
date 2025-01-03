@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class Player {
     private int pdv;
     private int money;
@@ -62,4 +64,16 @@ public class Player {
         StdDraw.setPenColor(StdDraw.YELLOW);
         StdDraw.text(100, 600, "Money : " + this.money);
     }
+
+    public void update(double deltaTime, LinkedList<Monstres> monstres) {
+    // Vérifie si des monstres ont atteint la base
+    for (Monstres monstre : monstres) {
+        if (monstre.getPosition().equals(new Point2D(0, 0))) { // Base en (0, 0) comme exemple
+            takeDamage(monstre);
+            System.out.println("Le joueur a pris des dégâts. PdV restants : " + this.pdv);
+        }
+    }
+    System.out.println("Argent actuel : " + this.money);
+}
+
 }

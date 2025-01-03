@@ -63,7 +63,7 @@ public class ZoneCarte {
 
         return new Point2D(0, 0) ; 
     }
-        */
+    */
 
     public void dessineCase(Case c){
         int x = c.getCentre().getX() ; 
