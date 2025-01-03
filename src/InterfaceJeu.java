@@ -1,5 +1,9 @@
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
 
 
 
@@ -32,17 +36,15 @@ public class InterfaceJeu {
         zoneInfoJoueur.dessineInfoJoueur();
         zoneCarte.dessineCarte();
 
-        String chemin = "resources/maps/5-8.mtp" ; 
+        String chemin = "resources/maps/10-10.mtp" ; 
         Carte carte = new Carte(chemin) ; 
-
-        Point2D spawn = carte.getSpawn();
-        int spawnX = spawn.getX() ; 
-        int spawnY = spawn.getY() ; 
-        System.out.println("(" + spawnX + "," + spawnY + ")");
-
+ 
         zoneCarte.dessineTerrain(carte);
         
         StdDraw.show();
+
+        ArrayList<Case> cheminMonstres = carte.initChemin() ; 
+        carte.afficheChemin(cheminMonstres);
     }
 
 }
