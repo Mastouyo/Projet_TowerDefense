@@ -32,14 +32,20 @@ public class InterfaceJeu {
         zoneCarte.dessineCarte();
 
         String chemin = "resources/maps/10-10.mtp" ; 
-        Carte carte = new Carte(chemin) ; 
- 
+        Carte carte = new Carte(chemin) ;
+        
         zoneCarte.dessineTerrain(carte);
         
-        StdDraw.show();
+        
 
-        ArrayList<Case> cheminMonstres = carte.initChemin() ; 
-        carte.afficheChemin(cheminMonstres);
+        Case constructible1 = carte.getCasesConstructibles().get(0) ;
+        Point2D coConstructible1 = constructible1.getCentre() ; 
+
+        Tours testTour = new Archer() ; 
+        carte.placerTour(testTour, coConstructible1);
+
+
+        StdDraw.show();
     }
 
 }

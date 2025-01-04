@@ -88,8 +88,8 @@ public class ZoneCarte {
 
 
     public void dessineTerrain(Carte carte) throws IOException {
-        for (int i = 0; i < hauteurMap(carte.getChemin()); i ++){
-            for (int j = 0; j < largeurMap(carte.getChemin()); j ++){
+        for (int i = 0; i < hauteurMap(carte.getFichier()); i ++){
+            for (int j = 0; j < largeurMap(carte.getFichier()); j ++){
                 
                 // Print pour vérifier la lecture des cases (visiblement correct)
                 // System.out.println(carte.getElement(i, j).toString());

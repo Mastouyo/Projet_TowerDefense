@@ -24,10 +24,15 @@ public class Carte extends ZoneCarte  {
         this.tailleCase = calculerTailleCases(Fichier) ;  
         this.carte = chargerCarte();
         this.casesConstructbiles = initListeCasesConstructibles() ; 
+        this.chemin = initChemin() ; 
     }
 
-    public String getChemin(){
+    public String getFichier(){
         return this.Fichier ; 
+    }
+
+    public ArrayList<Case> getChemin(){
+        return this.chemin ; 
     }
 
     public Case getElement(int i, int j){
@@ -71,6 +76,7 @@ public class Carte extends ZoneCarte  {
 
                     int offsetX = ((x * tailleCase) - (ligne.length() * tailleCase) / 2) + 35 ;
                     int offsetY = ((y * tailleCase) - (ligne.length() * tailleCase) / 2) + 35;
+                    
 
                     Point2D centre = new Point2D(mapCenter.getX() + offsetX, mapCenter.getY() - offsetY);
                     // Point2D centre = new Point2D(x * tailleCase, y * tailleCase); // Calcul des coordonnées du centre
@@ -122,6 +128,10 @@ public class Carte extends ZoneCarte  {
             }
         }
         return casesConstructibles ; 
+    }
+
+    public ArrayList<Case> getCasesConstructibles() {
+        return this.casesConstructbiles ; 
     }
 
     public void ajouterCaseConstructible(Case c){
@@ -180,6 +190,17 @@ public class Carte extends ZoneCarte  {
         return null ; 
     }
 
+    public Case caseSelonCoordonees(Point2D co){
+        for (int i = 0 ; i < this.carte.size(); i ++){
+            for (int j = 0 ; j < this.carte.get(i).size() ; j ++){
+                if (this.carte.get(i).get(j).getCentre() == co){
+                    return this.carte.get(i).get(j) ; 
+                }
+            }
+        }
+        return null ; 
+    }
+
     // Renvoie la case aux indices i et j dans la liste de liste Carte
     // FONCTIONNE
     public Case caseSelonIndices(int i, int j){
@@ -203,15 +224,13 @@ public class Carte extends ZoneCarte  {
         int positionI = positionDansLaCarte(c).getX() ; 
         int positionJ = positionDansLaCarte(c).getY() ; 
 
-        // Case au dessus 
+        
         Case cUP = caseSelonIndices(positionI - 1, positionJ);
         Case cRIGHT = caseSelonIndices(positionI, positionJ + 1);
         Case cDOWN = caseSelonIndices(positionI + 1, positionJ);
         Case cLEFT = caseSelonIndices(positionI, positionJ - 1);
 
-
-
-
+        // Case au dessus
         if (((cUP.getType() == TypesCases.Route) || (cUP.getType() == TypesCases.Base)) &&  
         (queue.contains(cUP) == false)){
             return cUP; }
@@ -251,9 +270,24 @@ public class Carte extends ZoneCarte  {
         return cheminMonstres ;
     }
 
-    public void afficheChemin (ArrayList<Case> chemin){
+    public void afficheChemin (){
+        ArrayList<Case> chemin = this.chemin ; 
+
         for (int i = 0 ; i < chemin.size() ; i ++){
             System.out.println(chemin.get(i).toString()) ; 
+        }
+    }
+
+    public void placerTour(Tours t, Point2D xy){
+        Case caseSouhaitee = caseSelonCoordonees(xy);
+        System.out.println(caseSouhaitee) ; 
+         
+
+        if ((caseSouhaitee != null) && (this.casesConstructbiles.contains(caseSouhaitee))) {
+            Point2D centreCase = caseSouhaitee.getCentre() ; 
+
+            t.drawVisuel(centreCase, caseSouhaitee.getTaille() / 3);
+            this.retirerCaseConstructible(caseSouhaitee);
         }
     }
     
