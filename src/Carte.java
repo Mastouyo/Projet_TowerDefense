@@ -2,8 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Queue; 
-import java.util.LinkedList;
+import java.awt.Color;
+
 
 
 public class Carte extends ZoneCarte  {
@@ -290,5 +290,29 @@ public class Carte extends ZoneCarte  {
             this.retirerCaseConstructible(caseSouhaitee);
         }
     }
-    
+
+    // Fonction de test qui dessine un petit carré noir sur toute les cases constructbiles 
+    public void montreCasesConstructibles() {
+        ArrayList<Case> casesConstructibles = this.casesConstructbiles ; 
+
+        for (int i = 0 ; i < casesConstructibles.size() ; i ++){
+            int x = casesConstructibles.get(i).getCentre().getX() ; 
+            int y = casesConstructibles.get(i).getCentre().getY() ; 
+
+            StdDraw.filledSquare(x, y, 10);
+        }
+    }
+
+    // Fonction de test qui dessine un petit carré rose sur toute les cases du chemin 
+    public void montreCasesChemin(){
+        ArrayList<Case> chemin = this.chemin ; 
+
+        for (int i = 0 ; i < chemin.size() ; i ++){
+            int x = chemin.get(i).getCentre().getX() ; 
+            int y = chemin.get(i).getCentre().getY() ; 
+
+            StdDraw.setPenColor(Color.PINK);
+            StdDraw.filledSquare(x, y, 10);
+        }
+    }
 }

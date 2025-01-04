@@ -36,13 +36,10 @@ public class InterfaceJeu {
         
         zoneCarte.dessineTerrain(carte);
         
+        carte.montreCasesConstructibles(); 
+        carte.montreCasesChemin(); 
+
         
-
-        Case constructible1 = carte.getCasesConstructibles().get(0) ;
-        Point2D coConstructible1 = constructible1.getCentre() ; 
-
-        Tours testTour = new Archer() ; 
-        carte.placerTour(testTour, coConstructible1);
 
 
         StdDraw.show();
