@@ -1,26 +1,36 @@
 import java.util.LinkedList;
 
 public class Player {
-    private int pdv;
-    private int money;
+    private int pdv; // Points de vie du joueur
+    private int money; // Argent disponible
 
-    public Player (){
-        this.pdv = 100;
-        this.money = 50;
+    public Player() {
+        this.pdv = 100; // Points de vie initiaux
+        this.money = 50; // Argent initial
     }
 
-    public boolean aPerdu(){
-        return this.pdv==0;
+    // Vérifie si le joueur a perdu
+    public boolean aPerdu() {
+        return this.pdv <= 0;
     }
 
-    public void takeDamage(Monstres m){
-        this.pdv -=m.getAtk();
-     }
+    // Ajoute des points de vie au joueur (exemple via bonus ou soin)
+    public void ajouterPdv(int montant) {
+        this.pdv += montant;
+        System.out.println("Soin reçu : +" + montant + " PdV. PdV actuels : " + this.pdv);
+    }
 
-    
-    public void recompense(Monstres m){
-        if(m.estTué()){
-            this.money +=m.reward;
+    // Réduit les points de vie du joueur
+    public void reduirePdv(int montant) {
+        this.pdv = Math.max(0, this.pdv - montant); // Empêche les PdV d'être négatifs
+        System.out.println("Le joueur a perdu " + montant + " PdV. PdV restants : " + this.pdv);
+    }
+
+    // Récompense donnée lorsque le joueur tue un monstre
+    public void recompense(Monstres m) {
+        if (m.estTué()) {
+            this.money += m.reward;
+            System.out.println("Récompense de " + m.reward + " ajoutée. Argent actuel : " + this.money);
         }
     }
 
@@ -28,52 +38,78 @@ public class Player {
     public boolean acheterTour(Tours t) {
         if (this.money >= t.getCost()) {
             this.money -= t.getCost();
+            System.out.println("Tour " + t.getName() + " achetée pour " + t.getCost() + ". Argent restant : " + this.money);
             return true; // Achat réussi
         } else {
-            System.out.println("Pas assez d'argent pour acheter cette tour !");
+            System.out.println("Pas assez d'argent pour acheter la tour " + t.getName() + " !");
             return false; // Achat échoué
         }
     }
 
+    // Construit une tour sur une case constructible
     public boolean construireTour(Tours t, Point2D position, Carte carte) {
         if (acheterTour(t)) { // Vérifie si l'achat est possible
-            if (carte.placerTour(t, position)) { // Vérifie si la position est constructible
-                System.out.println("Tour placée en " + position);
+            Case caseSouhaitee = carte.caseSelonCoordonees(position);
+            if (caseSouhaitee != null && caseSouhaitee.getType() == TypesCases.Constructible) {
+                carte.placerTour(t, position); // Ajoute la tour sur la carte
+                System.out.println("Tour " + t.getName() + " placée en " + position);
                 return true;
             } else {
-                System.out.println("Impossible de placer une tour ici !");
-                this.money += t.getCost(); // Rembourse l'argent si placement échoué
+                System.out.println("Impossible de placer la tour ici !");
+                this.money += t.getCost(); // Rembourse l'argent si le placement échoue
                 return false;
             }
         }
         return false;
     }
 
+    // Mise à jour de l'état du joueur (gestion des monstres atteignant la base)
+    public void update(double deltaTime, LinkedList<Monstres> monstres, Carte carte) {
+        LinkedList<Monstres> monstresAyantAtteintBase = new LinkedList<>();
+
+        for (Monstres monstre : monstres) {
+            if (monstre.getPosition().equals(carte.getBase())) { // Vérifie si le monstre a atteint la base
+                reduirePdv((int) monstre.getAtk()); // Réduit les points de vie du joueur en fonction de l'attaque du monstre
+                monstresAyantAtteintBase.add(monstre); // Ajoute le monstre à la liste des monstres à retirer
+                monstre.setPdv(0); // Considère le monstre comme détruit après avoir infligé des dégâts
+                System.out.println("Le monstre " + monstre.getClass().getSimpleName() + " a atteint la base.");
+            }
+        }
+
+        // Supprimer les monstres qui ont atteint la base
+        monstres.removeAll(monstresAyantAtteintBase);
+        System.out.println("État actuel : PdV = " + this.pdv + ", Argent = " + this.money);
+    }
+
+    // Getter pour les points de vie
     public int getPdv() {
         return pdv;
     }
 
+    // Setter pour les points de vie
+    public void setPdv(int pdv) {
+        this.pdv = pdv;
+    }
+
+    // Getter pour l'argent
     public int getMoney() {
         return money;
     }
-    
-     // Rendu graphique des informations du joueur
-     public void render() {
-        StdDraw.setPenColor(StdDraw.RED);
-        StdDraw.text(100, 650, "PdV : " + this.pdv);
-        StdDraw.setPenColor(StdDraw.YELLOW);
-        StdDraw.text(100, 600, "Money : " + this.money);
+
+    // Ajout d'argent (par exemple via bonus ou récompense)
+    public void ajouterArgent(int montant) {
+        this.money += montant;
+        System.out.println("Bonus de " + montant + " ajouté. Argent total : " + this.money);
     }
 
-    public void update(double deltaTime, LinkedList<Monstres> monstres) {
-    // Vérifie si des monstres ont atteint la base
-    for (Monstres monstre : monstres) {
-        if (monstre.getPosition().equals(new Point2D(0, 0))) { // Base en (0, 0) comme exemple
-            takeDamage(monstre);
-            System.out.println("Le joueur a pris des dégâts. PdV restants : " + this.pdv);
+    // Réduit l'argent disponible (par exemple lors d'une réparation)
+    public void reduireArgent(int montant) {
+        if (montant <= this.money) {
+            this.money -= montant;
+            System.out.println("Montant de " + montant + " retiré. Argent restant : " + this.money);
+        } else {
+            System.out.println("Fonds insuffisants pour retirer " + montant);
         }
     }
-    System.out.println("Argent actuel : " + this.money);
 }
 
-}

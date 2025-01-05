@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.awt.Color;
 
 
@@ -11,8 +12,8 @@ public class Carte extends ZoneCarte  {
     private String Fichier ;
     private int tailleCase; 
     private ArrayList<ArrayList<Case>> carte ; 
-    private ArrayList<Case> casesConstructbiles ; 
-    private ArrayList<Case> chemin ; 
+    private LinkedList<Case> casesConstructbiles ; 
+    private LinkedList<Case> chemin ; 
 
     private int largeur = 350 ; 
     private int hauteur = 350 ;
@@ -31,7 +32,7 @@ public class Carte extends ZoneCarte  {
         return this.Fichier ; 
     }
 
-    public ArrayList<Case> getChemin(){
+    public LinkedList<Case> getChemin(){
         return this.chemin ; 
     }
 
@@ -118,8 +119,8 @@ public class Carte extends ZoneCarte  {
         System.out.println(carteString.toString());
     }    
 
-    private ArrayList<Case> initListeCasesConstructibles(){
-        ArrayList<Case> casesConstructibles = new ArrayList<>() ; 
+    private LinkedList<Case> initListeCasesConstructibles(){
+        LinkedList<Case> casesConstructibles = new LinkedList<>() ; 
         for (ArrayList<Case> ligne : carte){
             for (Case c : ligne){
                 if (c.getType() == TypesCases.Constructible){
@@ -130,7 +131,7 @@ public class Carte extends ZoneCarte  {
         return casesConstructibles ; 
     }
 
-    public ArrayList<Case> getCasesConstructibles() {
+    public LinkedList<Case> getCasesConstructibles() {
         return this.casesConstructbiles ; 
     }
 
@@ -220,7 +221,7 @@ public class Carte extends ZoneCarte  {
     }
 
     
-    public Case prochaineCase(Case c, ArrayList<Case> queue){
+    public Case prochaineCase(Case c, LinkedList<Case> queue){
         int positionI = positionDansLaCarte(c).getX() ; 
         int positionJ = positionDansLaCarte(c).getY() ; 
 
@@ -257,8 +258,8 @@ public class Carte extends ZoneCarte  {
          else { return null ; }
     }
 
-    public ArrayList<Case> initChemin(){
-        ArrayList<Case> cheminMonstres = new ArrayList<Case>() ;
+    public LinkedList<Case> initChemin(){
+        LinkedList<Case> cheminMonstres = new LinkedList<Case>() ;
         
         Case courant = getCaseSpawn() ; 
         cheminMonstres.add(courant) ; 
@@ -271,7 +272,7 @@ public class Carte extends ZoneCarte  {
     }
 
     public void afficheChemin (){
-        ArrayList<Case> chemin = this.chemin ; 
+        LinkedList<Case> chemin = this.chemin ; 
 
         for (int i = 0 ; i < chemin.size() ; i ++){
             System.out.println(chemin.get(i).toString()) ; 
@@ -293,7 +294,7 @@ public class Carte extends ZoneCarte  {
 
     // Fonction de test qui dessine un petit carré noir sur toute les cases constructbiles 
     public void montreCasesConstructibles() {
-        ArrayList<Case> casesConstructibles = this.casesConstructbiles ; 
+        LinkedList<Case> casesConstructibles = this.casesConstructbiles ; 
 
         for (int i = 0 ; i < casesConstructibles.size() ; i ++){
             int x = casesConstructibles.get(i).getCentre().getX() ; 
@@ -305,7 +306,7 @@ public class Carte extends ZoneCarte  {
 
     // Fonction de test qui dessine un petit carré rose sur toute les cases du chemin 
     public void montreCasesChemin(){
-        ArrayList<Case> chemin = this.chemin ; 
+        LinkedList<Case> chemin = this.chemin ; 
 
         for (int i = 0 ; i < chemin.size() ; i ++){
             int x = chemin.get(i).getCentre().getX() ; 

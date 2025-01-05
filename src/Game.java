@@ -4,133 +4,187 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Game {
-    private Player player; // Le joueur
-    private LinkedList<Monstres> monstres; // Liste des monstres actifs
-    private List<Wave> waves; // Liste des vagues à affronter
-    private int currentWaveIndex; // Index de la vague en cours
+    private Player player;
+    private InterfaceJeu uI;
+    private Level niveau;
+    private Carte carte;
+    private LinkedList<Monstres> monstres;
+    private List<Wave> waves;
+    private List<String> levels;  // Liste des niveaux
+    private int currentWaveIndex;
+    private int currentLevelIndex;
     private boolean gameRunning;
 
     public void launch() {
         init();
         long previousTime = System.currentTimeMillis();
+
         while (isGameRunning()) {
             long currentTime = System.currentTimeMillis();
-            double deltaTimeSec = (double) (currentTime - previousTime) / 1000;
+            double deltaTimeSec = (double) (currentTime - previousTime) / 1000.0;
             previousTime = currentTime;
+
             update(deltaTimeSec);
+            render();
+        }
+
+        endGame();
+    }
+
+    private void init() {
+        System.out.println("Initialisation du jeu...");
+        player = new Player();
+        monstres = new LinkedList<>();
+        gameRunning = true;
+
+        try {
+            loadGame("resources/games/game.g");  // Charger le fichier de jeu
+            currentLevelIndex = 0;
+            loadNextLevel();  // Charger le premier niveau
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement du fichier de jeu : " + e.getMessage());
+            gameRunning = false;
+        }
+    }
+
+    private void loadGame(String gameFilePath) throws IOException {
+        levels = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(gameFilePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                levels.add("resources/levels/" + line.trim() + ".lvl");
+                System.out.println("Niveau ajouté : " + line.trim());
+            }
+        }
+
+        if (levels.isEmpty()) {
+            throw new IOException("Aucun niveau spécifié dans le fichier de jeu !");
+        }
+    }
+
+    private void loadNextLevel() {
+        try {
+            String nextLevelFile = levels.get(currentLevelIndex);
+            System.out.println("Chargement du niveau : " + nextLevelFile);
+    
+            niveau = new Level(nextLevelFile); // Charger le niveau (carte + vagues)
+            carte = niveau.getCarte(); // Récupérer la carte
+    
+            // Ne rechargez pas la carte ici, utilisez celle déjà chargée.
+            waves = niveau.getWaves(); // Charger les vagues
+            currentWaveIndex = 0;
+    
+            uI = new InterfaceJeu(player, carte); // Créer l'interface avec la carte actuelle
+            startNextWave(); // Démarrer la première vague
+        } catch (IOException e) {
+            System.err.println("Erreur lors du chargement du niveau suivant : " + e.getMessage());
+            gameRunning = false;
         }
     }
     
+
     private boolean isGameRunning() {
+        System.out.println("Vérification de l'état du jeu...");
+        System.out.println("Nombre de monstres actifs : " + monstres.size());
         if (player.aPerdu()) {
-            System.out.println("Défaite !");
+            System.out.println("Le joueur a perdu !");
             return false;
         }
         if (allEnemiesDead() && isLastWaveComplete()) {
-            System.out.println("Victoire !");
-            return false;
+            System.out.println("Niveau terminé !");
+            if (currentLevelIndex < levels.size() - 1) {
+                nextLevel();  // Passer au niveau suivant
+            } else {
+                System.out.println("Victoire totale !");
+                return false;  // Fin du jeu si tous les niveaux sont terminés
+            }
         }
         return gameRunning;
     }
-    
-    // Fonction simulant la vérification de la fin des vagues et des ennemis
+
+    private void nextLevel() {
+        currentLevelIndex++;
+        System.out.println("Passage au niveau suivant : " + (currentLevelIndex + 1));
+        loadNextLevel();  // Charger le prochain niveau
+    }
+
     private boolean allEnemiesDead() {
-        return monstres.stream().noneMatch(monstre -> monstre.isAlive());
+        return monstres.stream().noneMatch(Monstres::isAlive);
     }
-    
+
     private boolean isLastWaveComplete() {
-        return currentWaveIndex >= waves.size();
+        // Vérifiez que tous les ennemis sont morts
+        boolean allMonstersDead = monstres.stream().allMatch(Monstres::isAlive);
+        
+        // La vague est terminée si tous les ennemis sont morts et si la liste des vagues est vide
+        return allMonstersDead && currentWaveIndex >= waves.size();
     }
     
-    private void init() {
-        System.out.println("Initialisation du jeu...");
-        player = new Player(); 
-        monstres = new LinkedList<>();
-        waves = loadWaves(); // Charger les vagues du jeu
-        currentWaveIndex = 0;
-        gameRunning = true;
 
-        startNextWave(); // Démarrer la première vague
+    private void update(double deltaTime) {
+        System.out.println("=== Mise à jour du jeu ===");
+        System.out.println("DeltaTimeSec : " + deltaTime + " secondes");
+    
+        // Mettre à jour chaque monstre
+        for (Monstres monstre : monstres) {
+            if (monstre.isAlive()) {
+                monstre.update(deltaTime, player);  // Met à jour la position des monstres
+            }
+        }
+    
+        // Mettre à jour la vague en cours
+        if (waves.size() > currentWaveIndex) {
+            Wave currentWave = waves.get(currentWaveIndex);
+            currentWave.update(deltaTime);  // Mise à jour de la vague
+            System.out.println("Temps actuel dans la vague " + (currentWaveIndex + 1) + " : " + currentWave.currentTime + " secondes");
+        }
+    
+        if (allEnemiesDead() && isLastWaveComplete()) {
+            gameRunning = false;
+        }
     }
     
-    private void update(double deltaTimeSec) {
-        // Mise à jour des monstres
-        monstres.forEach(monstre -> monstre.update(deltaTimeSec, player));
 
-        // Retirer les monstres morts
-        monstres = monstres.stream().filter(Monstres::isAlive).collect(Collectors.toCollection(LinkedList::new));
+    private void render() {
+        StdDraw.clear();
+        System.out.println("Rendu en cours...");
 
-        // Vérifier si la vague est terminée
-        if (monstres.isEmpty() && currentWaveIndex < waves.size()) {
-            startNextWave();
+        uI.afficheJeu();  // Affiche la carte et les infos
+        System.out.println("Interface de jeu affichée.");
+
+        for (Monstres monstre : monstres) {
+            if (monstre.isAlive()) {
+                monstre.render();  // Dessin du monstre
+                System.out.println("Monstre affiché : " + monstre.getClass().getSimpleName());
+            }
         }
 
-        // Mettre à jour les tours et les autres éléments du jeu
-        player.update(deltaTimeSec,monstres);
+        StdDraw.show();
     }
 
     private void endGame() {
         if (player.aPerdu()) {
-            System.out.println("Le joueur a perdu !");
+            System.out.println("Défaite ! Le joueur a perdu.");
         } else {
-            System.out.println("Félicitations, vous avez gagné !");
+            System.out.println("Félicitations ! Vous avez terminé toutes les vagues.");
         }
+        StdDraw.clear();
+        StdDraw.text(512, 360, "Fin du jeu. Merci d'avoir joué !");
+        StdDraw.show();
     }
-
-   private List<Wave> loadWaves() {
-    List<Wave> loadedWaves = new ArrayList<>();
-    String cheminFichier = "resources/waves/waves.txt"; // Chemin vers votre fichier de vagues
-
-    try (BufferedReader br = new BufferedReader(new FileReader(cheminFichier))) {
-        String ligne;
-        Wave currentWave = null;
-
-        while ((ligne = br.readLine()) != null) {
-            ligne = ligne.trim();
-            if (ligne.isEmpty()) {
-                continue; // Ignorer les lignes vides
-            }
-
-            if (ligne.matches("\\d+")) { // Si la ligne contient seulement un numéro, c'est une nouvelle vague
-                int numeroVague = Integer.parseInt(ligne);
-                currentWave = new Wave(numeroVague);
-                loadedWaves.add(currentWave);
-            } else { // Sinon, c'est un ennemi avec un temps de spawn
-                if (currentWave != null) {
-                    String[] parts = ligne.split(",");
-                    String typeMonstre = parts[0].trim();
-                    double tempsSpawn = Double.parseDouble(parts[1].trim());
-                    currentWave.addEnemySpawn(tempsSpawn, typeMonstre);
-                }
-            }
-        }
-    } catch (IOException e) {
-        System.err.println("Erreur lors du chargement des vagues : " + e.getMessage());
-    }
-
-    return loadedWaves;
-}
 
     private void startNextWave() {
         if (currentWaveIndex < waves.size()) {
-            // Charger la prochaine vague
             Wave currentWave = waves.get(currentWaveIndex);
             System.out.println("Démarrage de la vague " + (currentWaveIndex + 1));
-            
-            // Ajouter les monstres de la vague à la liste des monstres actifs
-            List<Monstres> nouveauxMonstres = currentWave.update(0); // Initialisation
+            List<Monstres> nouveauxMonstres = currentWave.update(0);  // Initialisation des monstres
             monstres.addAll(nouveauxMonstres);
-    
-            // Passer à la vague suivante
             currentWaveIndex++;
         } else {
             System.out.println("Toutes les vagues ont été complétées !");
-            gameRunning = false; // Le jeu s'arrête si toutes les vagues sont terminées
+            gameRunning = false;
         }
     }
-    
-    
 }

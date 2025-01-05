@@ -10,6 +10,11 @@ abstract class Entites {
     public Point2D getPosition() {
         return position;
     }
+
+    public void setPosition(Point2D position) {
+        this.position = position;
+    }
+
     
     public Entites (){
         
@@ -19,6 +24,9 @@ abstract class Entites {
         return pdv;
     }
 
+    public void setPdv(double pdv) {
+        this.pdv = pdv;
+    }
 
     public double getAtk() {
         return atk;
@@ -34,6 +42,10 @@ abstract class Entites {
 
     public Element getElem() {
         return elem;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean estTué(){

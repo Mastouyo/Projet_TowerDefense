@@ -11,7 +11,6 @@ public class Boss extends Monstres{
         this.elem = new Element(Type.Fire);
         this.speed = 0.5;
         this.reward = 100;
-        //this.position 
     }
     
     private Tours cible(){

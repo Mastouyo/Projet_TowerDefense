@@ -1,48 +1,54 @@
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
 
 public class InterfaceJeu {
-    private ZoneInfoJeu zoneInfoJeu; 
-    private ZoneInfoJoueur zoneInfoJoueur; 
-    private ZoneBoutique zoneBoutique; 
-    private ZoneCarte zoneCarte; 
-    public Point2D center =new Point2D(500,350);
-    public Point2D halfDist= new Point2D(500,350);
+    private ZoneInfoJeu zoneInfoJeu;      // Affiche les informations sur la partie
+    private ZoneInfoJoueur zoneInfoJoueur;  // Affiche les informations du joueur
+    private ZoneBoutique zoneBoutique;    // Affiche la boutique pour acheter des tours
+    private ZoneCarte zoneCarte;          // Affiche la carte du jeu
+    private Carte carte;  // Carte actuelle du niveau
+    public Point2D center = new Point2D(500, 350);  // Centre de la carte
+    public Point2D halfDist = new Point2D(500, 350);  // Distances d'affichage
 
-    public InterfaceJeu(Player player){
-        //Création et affichage de la fenêtre de base 
+    public InterfaceJeu(Player player, Carte carte) throws IOException {
+        // Configuration de la fenêtre
         StdDraw.setCanvasSize(1024, 720);
         StdDraw.setXscale(-12, 1012);
         StdDraw.setYscale(-10, 710);
-        StdDraw.enableDoubleBuffering();
+        StdDraw.enableDoubleBuffering();  // Évite le scintillement
 
-        zoneBoutique = new ZoneBoutique();
-        zoneCarte = new ZoneCarte();
-        zoneInfoJeu = new ZoneInfoJeu();
-        zoneInfoJoueur = new ZoneInfoJoueur(player);
+        // Initialisation des zones d'interface
+        zoneBoutique = new ZoneBoutique();  // Affiche la boutique de tours
+        zoneCarte = new ZoneCarte();        // Zone graphique pour la carte du jeu
+        zoneInfoJeu = new ZoneInfoJeu();    // Informations générales de la partie
+        zoneInfoJoueur = new ZoneInfoJoueur(player);  // Informations du joueur (argent, tours, PV)
+
+        this.carte = carte;  // La carte utilisée pour dessiner
     }
 
-    public void afficheJeu() throws IOException{
-        zoneBoutique.dessineBoutique();
-        zoneInfoJeu.dessineInfoJoueur();
-        zoneInfoJoueur.dessineInfoJoueur();
-        zoneCarte.dessineCarte();
+    public void afficheJeu() {
+        try {
+            // Affichage de la boutique, des informations et de la carte
+            System.out.println("Affichage de la boutique...");
+            zoneBoutique.dessineBoutique();  // Affiche la boutique des tours
 
-        String chemin = "resources/maps/10-10.mtp" ; 
-        Carte carte = new Carte(chemin) ;
-        
-        zoneCarte.dessineTerrain(carte);
-        
-        carte.montreCasesConstructibles(); 
-        carte.montreCasesChemin(); 
+            System.out.println("Affichage des informations du joueur...");
+            zoneInfoJoueur.dessineInfoJoueur();  // Affiche les informations du joueur
 
-        
+            System.out.println("Affichage des informations de la partie...");
+            zoneInfoJeu.dessineInfoJoueur();  // Affiche les informations générales de la partie
 
+            System.out.println("Affichage de la carte...");
+            zoneCarte.dessineCarte();  // Affiche la carte
 
-        StdDraw.show();
+            // Dessin des détails de la carte
+            System.out.println("Affichage du terrain...");
+            zoneCarte.dessineTerrain(carte);  // Dessine le terrain avec la carte actuelle
+            StdDraw.show();  // Affiche tous les éléments sur l'écran
+
+        } catch (IOException e) {
+            System.err.println("Erreur lors de l'affichage du jeu : " + e.getMessage());
+        }
     }
-
 }
+
+
