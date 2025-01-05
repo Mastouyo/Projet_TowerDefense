@@ -1,7 +1,7 @@
 import java.util.Comparator;
 
 public class WindGrognard extends Monstres{
-    public WindGrognard(){
+    public WindGrognard(Carte map){
         this.name = "WindGrognard";
         this.pdv = 1;
         this.atk = 7;
@@ -10,6 +10,7 @@ public class WindGrognard extends Monstres{
         this.elem = new Element(Type.Wind);
         this.speed = 2;
         this.reward = 1;
+        this.map=map;
     }
 
     private Tours cible(){

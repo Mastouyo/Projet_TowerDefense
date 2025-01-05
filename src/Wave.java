@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Wave {
     private final int waveNumber;  // Numéro de la vague
     private final List<EnemySpawn> enemySpawns;  // Liste des ennemis à générer
@@ -95,23 +99,27 @@ public class Wave {
         System.out.println("Nombre de monstres actifs : " + activeMonsters.size());
         return spawnedMonsters;
     }
-    
+
+    // Méthode pour vérifier si la vague est terminée
+    public boolean isCompleted() {
+        return completed;
+    }
 
     // Méthode pour créer un ennemi à partir de son type
     private Monstres createEnemy(String enemyType) {
         switch (enemyType) {
             case "Minion":
-                return new Minion();
+                return new Minion(carte);
             case "Earth Brute":
-                return new EarthBrute();
+                return new EarthBrute(carte);
             case "Water Brute":
-                return new WaterBrute();
+                return new WaterBrute(carte);
             case "Fire Grognard":
-                return new FireGrognard();
+                return new FireGrognard(carte);
             case "Wind Grognard":
-                return new WindGrognard();
+                return new WindGrognard(carte);
             case "Boss":
-                return new Boss();
+                return new Boss(carte);
             default:
                 System.err.println("Type d'ennemi inconnu : " + enemyType);
                 return null;

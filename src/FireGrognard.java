@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class FireGrognard extends Monstres{
-    public FireGrognard(){
+    public FireGrognard(Carte map){
         this.name = "FireGrognard";
         this.pdv = 1;
         this.atk = 7;
@@ -11,6 +11,7 @@ public class FireGrognard extends Monstres{
         this.elem = new Element(Type.Fire);
         this.speed = 2;
         this.reward = 1;
+        this.map=map;
     }
 
     

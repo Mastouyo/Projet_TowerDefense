@@ -46,11 +46,11 @@ public class ZoneBoutique {
         StdDraw.rectangle(center.getX(), center.getY(), halfDist.getX(), halfDist.getY());
     
         // Dimensions pour les cadres
-        int largeurCadre = halfDist.getX() / 2 -1;
-        int hauteur = halfDist.getY() / 10;
+        double largeurCadre = halfDist.getX() / 2 -1;
+        double hauteur = halfDist.getY() / 10;
         int startX = 785; // Coordonnée X initiale
         int startY = 575; // Coordonnée Y initiale
-        int spacingY = 2 * hauteur; // Espacement vertical entre les cadres
+        double spacingY = 2 * hauteur; // Espacement vertical entre les cadres
     
         // Liste des tours avec leurs positions
         Tours[] tours = {archer, eC, fC, waC, wiC};

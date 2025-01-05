@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class EarthBrute extends Monstres{
-    public EarthBrute(){
+    public EarthBrute(Carte map){
         this.name = "EarthBrute";
         this.pdv = 30;
         this.atk = 5;
@@ -11,6 +11,7 @@ public class EarthBrute extends Monstres{
         this.elem = new Element(Type.Earth);
         this.speed = 1;
         this.reward = 3;
+        this.map=map;
     }
 
     private Tours cible(){

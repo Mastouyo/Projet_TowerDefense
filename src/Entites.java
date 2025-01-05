@@ -52,11 +52,11 @@ abstract class Entites {
         return this.getPdv()==0;
     }
 
-    public double hypothénus(int x, int y){
+    public double hypothénus(double x, double y){
       return Math.sqrt(x*x + y*y);
     }
 
-    public int distance(int x1, int x2){
+    public double distance(double x1, double x2){
         return Math.abs(x1-x2);
         
     }

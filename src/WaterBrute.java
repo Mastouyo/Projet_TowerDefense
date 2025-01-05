@@ -1,7 +1,7 @@
 import java.util.Comparator;
 
 public class WaterBrute extends Monstres{
-    public WaterBrute(){
+    public WaterBrute(Carte map){
         this.name = "WaterBrute";
         this.pdv = 30;
         this.atk = 5;
@@ -10,6 +10,7 @@ public class WaterBrute extends Monstres{
         this.elem = new Element(Type.Water);
         this.speed = 1;
         this.reward = 3;
+        this.map=map;
     }
 
     private Tours cible(){

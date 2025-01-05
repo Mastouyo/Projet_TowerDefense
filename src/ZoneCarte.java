@@ -66,8 +66,8 @@ public class ZoneCarte {
     */
 
     public void dessineCase(Case c){
-        int x = c.getCentre().getX() ; 
-        int y = c.getCentre().getY() ; 
+        double x = c.getCentre().getX() ; 
+        double y = c.getCentre().getY() ; 
         int t = c.getTaille() / 2 ; 
         TypesCases type = c.getType() ; 
 

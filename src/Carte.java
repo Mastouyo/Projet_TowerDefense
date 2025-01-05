@@ -5,39 +5,48 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.awt.Color;
 
-
-
-public class Carte extends ZoneCarte  {
-    
-    private String Fichier ;
+public class Carte extends ZoneCarte {
+    private String Fichier;
     private int tailleCase; 
-    private ArrayList<ArrayList<Case>> carte ; 
-    private LinkedList<Case> casesConstructbiles ; 
-    private LinkedList<Case> chemin ; 
+    private ArrayList<ArrayList<Case>> carte;
+    private LinkedList<Case> casesConstructbiles;
+    private LinkedList<Case> chemin;
 
-    private int largeur = 350 ; 
-    private int hauteur = 350 ;
-    private Point2D mapCenter = new Point2D(largeur, hauteur) ; 
+    private double largeur = 350.0; 
+    private double hauteur = 350.0;
+    private Point2D mapCenter = new Point2D(largeur, hauteur);
 
-
-    public Carte (String Fichier) throws IOException{
-        this.Fichier = Fichier ;  
-        this.tailleCase = calculerTailleCases(Fichier) ;  
+    public Carte(String Fichier) throws IOException {
+        this.Fichier = Fichier;  
+        this.tailleCase = calculerTailleCases(Fichier);  
         this.carte = chargerCarte();
-        this.casesConstructbiles = initListeCasesConstructibles() ; 
-        this.chemin = initChemin() ; 
+        this.casesConstructbiles = initListeCasesConstructibles(); 
+        this.chemin = initChemin(); 
     }
 
-    public String getFichier(){
-        return this.Fichier ; 
+    public String getFichier() {
+        return this.Fichier; 
     }
 
-    public LinkedList<Case> getChemin(){
-        return this.chemin ; 
+    public Case getTile(double row, double col) {
+        int rowIndex = (int) row;
+        int colIndex = (int) col;
+        if (rowIndex < 0 || colIndex < 0 || rowIndex >= carte.size() || colIndex >= carte.get(rowIndex).size()) {
+            return null; // Hors limites
+        }
+        return carte.get(rowIndex).get(colIndex);
     }
 
-    public Case getElement(int i, int j){
-        return (this.carte.get(i)).get(j) ; 
+    public int getTailleCase() {
+        return tailleCase;
+    }
+
+    public LinkedList<Case> getChemin() {
+        return this.chemin; 
+    }
+
+    public Case getElement(int i, int j) {
+        return this.carte.get(i).get(j); 
     }
 
     private TypesCases obtenirTypeCase(char c) {
@@ -58,238 +67,200 @@ public class Carte extends ZoneCarte  {
     }
 
     public ArrayList<ArrayList<Case>> chargerCarte() throws IOException {
-        String cheminFichier = this.Fichier ; 
         ArrayList<ArrayList<Case>> carte = new ArrayList<>();
-        int y = 0;  // Coordonnée Y de la case (on incrémente pour chaque ligne)
+        int y = 0;
 
-        // Lecture du fichier .mtp
-        try (BufferedReader reader = new BufferedReader(new FileReader(cheminFichier))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.Fichier))) {
             String ligne;
-            // Lire chaque ligne du fichier
             while ((ligne = reader.readLine()) != null) {
                 ArrayList<Case> ligneCases = new ArrayList<>();
-                int x = 0;  // Coordonnée X de la case (on incrémente pour chaque caractère de la ligne)
+                int x = 0;
 
-                // Pour chaque caractère de la ligne, ajouter une case
                 for (char c : ligne.toCharArray()) {
-                    TypesCases type = obtenirTypeCase(c); // Déterminer le type de la case en fonction du caractère
-
-
-                    int offsetX = ((x * tailleCase) - (ligne.length() * tailleCase) / 2) + 35 ;
-                    int offsetY = ((y * tailleCase) - (ligne.length() * tailleCase) / 2) + 35;
-                    
-
+                    TypesCases type = obtenirTypeCase(c);
+                    double offsetX = ((x * tailleCase) - (ligne.length() * tailleCase) / 2.0) + 35.0;
+                    double offsetY = ((y * tailleCase) - (ligne.length() * tailleCase) / 2.0) + 35.0;
                     Point2D centre = new Point2D(mapCenter.getX() + offsetX, mapCenter.getY() - offsetY);
-                    // Point2D centre = new Point2D(x * tailleCase, y * tailleCase); // Calcul des coordonnées du centre
-                    
-                    Case caseActuelle = new Case(type, tailleCase, centre); // Créer la case
-                    ligneCases.add(caseActuelle); // Ajouter la case à la ligne
-                    x++; // Incrémenter la coordonnée X pour la prochaine case
+                    ligneCases.add(new Case(type, tailleCase, centre));
+                    x++;
                 }
-
-                carte.add(ligneCases); // Ajouter la ligne de cases à la carte
-                y++; // Incrémenter la coordonnée Y pour la prochaine ligne
+                carte.add(ligneCases);
+                y++;
             }
         }
-
-        return carte; // Retourner la carte complète
+        return carte;
     }
 
     public void afficherCarteString() {
         StringBuilder carteString = new StringBuilder();
-        
         for (ArrayList<Case> ligne : carte) {
             for (Case c : ligne) {
-                // Construire la chaîne pour chaque case sous la forme (type, x, y)
                 carteString.append("(")
-                            .append(c.getType().toString())   // Type de la case (SPAWN, BASE, etc.)
-                            .append(", ")
-                            .append((int) c.getCentre().getX()) // Coordonnée x de la case
-                            .append(", ")
-                            .append((int) c.getCentre().getY()) // Coordonnée y de la case
-                            .append(") "); // Fermeture de la parenthèse et espace
-
+                           .append(c.getType().toString())
+                           .append(", ")
+                           .append(c.getCentre().getX())
+                           .append(", ")
+                           .append(c.getCentre().getY())
+                           .append(") ");
             }
-            // Ajouter un saut de ligne après chaque ligne de cases
             carteString.append("\n");
         }
+        System.out.println(carteString);
+    }
 
-
-        // Afficher la carte sous forme de chaîne
-        System.out.println(carteString.toString());
-    }    
-
-    private LinkedList<Case> initListeCasesConstructibles(){
-        LinkedList<Case> casesConstructibles = new LinkedList<>() ; 
-        for (ArrayList<Case> ligne : carte){
-            for (Case c : ligne){
-                if (c.getType() == TypesCases.Constructible){
-                    casesConstructibles.add(c) ; 
+    private LinkedList<Case> initListeCasesConstructibles() {
+        LinkedList<Case> casesConstructibles = new LinkedList<>(); 
+        for (ArrayList<Case> ligne : carte) {
+            for (Case c : ligne) {
+                if (c.getType() == TypesCases.Constructible) {
+                    casesConstructibles.add(c); 
                 }
             }
         }
-        return casesConstructibles ; 
+        return casesConstructibles; 
     }
 
     public LinkedList<Case> getCasesConstructibles() {
-        return this.casesConstructbiles ; 
+        return this.casesConstructbiles; 
     }
 
-    public void ajouterCaseConstructible(Case c){
+    public void ajouterCaseConstructible(Case c) {
         c.setLibreTrue();
-        this.casesConstructbiles.add(c) ; 
+        this.casesConstructbiles.add(c); 
     }
 
-    public void retirerCaseConstructible(Case c){
+    public void retirerCaseConstructible(Case c) {
         c.setLibreFalse();
-        this.casesConstructbiles.remove(c) ; 
+        this.casesConstructbiles.remove(c); 
     }
 
-    public Point2D getSpawn(){
-        for (ArrayList<Case> ligne : carte){
-            for (Case c : ligne){
-                if (c.getType() == TypesCases.Spawn){
-                    return c.getCentre() ; 
-                }
-            }
-        }
-        return new Point2D(-1, -1) ; 
-    }
-
-    public Point2D getBase(){
-        for (ArrayList<Case> ligne : carte){
+    public Point2D getSpawn() {
+        for (ArrayList<Case> ligne : carte) {
             for (Case c : ligne) {
-                if (c.getType() == TypesCases.Base){
-                    return c.getCentre() ; 
+                if (c.getType() == TypesCases.Spawn) {
+                    return c.getCentre(); 
                 }
             }
         }
-        return new Point2D(-1, -1) ; 
+        return new Point2D(-1.0, -1.0); 
     }
 
-    // FONCTIONNE 
-    public Case getCaseSpawn(){
-        for (ArrayList<Case> ligne : carte){
-            for (Case c : ligne){
-                if (c.getType() == TypesCases.Spawn){
+    public Point2D getBase() {
+        for (ArrayList<Case> ligne : carte) {
+            for (Case c : ligne) {
+                if (c.getType() == TypesCases.Base) {
+                    return c.getCentre(); 
+                }
+            }
+        }
+        return new Point2D(-1.0, -1.0); 
+    }
+
+    public Case getCaseSpawn() {
+        for (ArrayList<Case> ligne : carte) {
+            for (Case c : ligne) {
+                if (c.getType() == TypesCases.Spawn) {
                     return c; 
                 }
             }
         }
-        return null ; 
+        return null; 
     }
 
-    // FONCTIONNE
-    public Case getCaseBase(){
-        for (ArrayList<Case> ligne : carte){
-            for (Case c : ligne){
-                if (c.getType() == TypesCases.Base){
+    public Case getCaseBase() {
+        for (ArrayList<Case> ligne : carte) {
+            for (Case c : ligne) {
+                if (c.getType() == TypesCases.Base) {
                     return c; 
                 }
             }
         }
-        return null ; 
+        return null; 
     }
 
-    public Case caseSelonCoordonees(Point2D co){
-        for (int i = 0 ; i < this.carte.size(); i ++){
-            for (int j = 0 ; j < this.carte.get(i).size() ; j ++){
-                if (this.carte.get(i).get(j).getCentre() == co){
-                    return this.carte.get(i).get(j) ; 
+    public Case caseSelonCoordonees(Point2D co) {
+        for (ArrayList<Case> ligne : carte) {
+            for (Case c : ligne) {
+                if (c.getCentre().equals(co)) {
+                    return c; 
                 }
             }
         }
-        return null ; 
+        return null; 
     }
 
-    // Renvoie la case aux indices i et j dans la liste de liste Carte
-    // FONCTIONNE
-    public Case caseSelonIndices(int i, int j){
-        if ((i < 0) || (j < 0)){ return null; }
-        return this.carte.get(i).get(j) ; 
+    public Case caseSelonIndices(double i, double j) {
+        int rowIndex = (int) i;
+        int colIndex = (int) j;
+        if (rowIndex < 0 || colIndex < 0 || rowIndex >= carte.size() || colIndex >= carte.get(rowIndex).size()) {
+            return null; 
+        }
+        return carte.get(rowIndex).get(colIndex); 
     }
 
-    // Renvoie les indices dans la list de liste carte de la case C
-    // FONCTIONNE
-    public Point2D positionDansLaCarte(Case c){
-        for (int i = 0 ; i < this.carte.size(); i ++){
-            if (this.carte.get(i).contains(c)){
-                return new Point2D (i , this.carte.get(i).indexOf(c)) ; 
+    public Point2D positionDansLaCarte(Case c) {
+        for (int i = 0; i < carte.size(); i++) {
+            if (carte.get(i).contains(c)) {
+                return new Point2D(i, carte.get(i).indexOf(c)); 
             }
         }
-        return null ;    
+        return null;    
     }
 
-    
-    public Case prochaineCase(Case c, LinkedList<Case> queue){
-        int positionI = positionDansLaCarte(c).getX() ; 
-        int positionJ = positionDansLaCarte(c).getY() ; 
+    public Case prochaineCase(Case c, LinkedList<Case> queue) {
+        Point2D position = positionDansLaCarte(c);
+        if (position == null) return null;
 
-        
+        double positionI = position.getX(); 
+        double positionJ =  position.getY(); 
+
         Case cUP = caseSelonIndices(positionI - 1, positionJ);
         Case cRIGHT = caseSelonIndices(positionI, positionJ + 1);
         Case cDOWN = caseSelonIndices(positionI + 1, positionJ);
         Case cLEFT = caseSelonIndices(positionI, positionJ - 1);
 
-        // Case au dessus
-        if (((cUP.getType() == TypesCases.Route) || (cUP.getType() == TypesCases.Base)) &&  
-        (queue.contains(cUP) == false)){
-            return cUP; }
-        
-
-        // Case à droite 
-        else if (((cRIGHT.getType() == TypesCases.Route) || (cRIGHT.getType() == TypesCases.Base)) &&  
-        (queue.contains(cRIGHT) == false)){
+        if (cUP != null && (cUP.getType() == TypesCases.Route || cUP.getType() == TypesCases.Base) && !queue.contains(cUP)) {
+            return cUP;
+        } else if (cRIGHT != null && (cRIGHT.getType() == TypesCases.Route || cRIGHT.getType() == TypesCases.Base) && !queue.contains(cRIGHT)) {
             return cRIGHT; 
-        }
-
-         // Case en bas
-         else if (((cDOWN.getType() == TypesCases.Route) || (cDOWN.getType() == TypesCases.Base)) &&  
-         (queue.contains(cDOWN) == false)){
-             return cDOWN;
-         }
-
-         // Case à gauche
-         else if (((cLEFT.getType() == TypesCases.Route) || (cLEFT.getType() == TypesCases.Base)) &&  
-         (queue.contains(cLEFT) == false)){
-             return cLEFT;
-         }
-
-         else { return null ; }
-    }
-
-    public LinkedList<Case> initChemin(){
-        LinkedList<Case> cheminMonstres = new LinkedList<Case>() ;
-        
-        Case courant = getCaseSpawn() ; 
-        cheminMonstres.add(courant) ; 
-
-        while (cheminMonstres.contains(getCaseBase()) == false ) {
-            courant = prochaineCase(courant, cheminMonstres) ;
-            cheminMonstres.add(courant) ;
-        }
-        return cheminMonstres ;
-    }
-
-    public void afficheChemin (){
-        LinkedList<Case> chemin = this.chemin ; 
-
-        for (int i = 0 ; i < chemin.size() ; i ++){
-            System.out.println(chemin.get(i).toString()) ; 
+        } else if (cDOWN != null && (cDOWN.getType() == TypesCases.Route || cDOWN.getType() == TypesCases.Base) && !queue.contains(cDOWN)) {
+            return cDOWN;
+        } else if (cLEFT != null && (cLEFT.getType() == TypesCases.Route || cLEFT.getType() == TypesCases.Base) && !queue.contains(cLEFT)) {
+            return cLEFT;
+        } else {
+            return null;
         }
     }
 
-    public void placerTour(Tours t, Point2D xy){
+    public LinkedList<Case> initChemin() {
+        LinkedList<Case> cheminMonstres = new LinkedList<>();
+        Case courant = getCaseSpawn(); 
+        cheminMonstres.add(courant); 
+
+        while (!cheminMonstres.contains(getCaseBase())) {
+            courant = prochaineCase(courant, cheminMonstres); 
+            if (courant == null) break;
+            cheminMonstres.add(courant); 
+        }
+        return cheminMonstres;
+    }
+
+    public void afficheChemin() {
+        for (Case caseChemin : chemin) {
+            System.out.println(caseChemin.toString()); 
+        }
+    }
+
+    public void placerTour(Tours t, Point2D xy) {
         Case caseSouhaitee = caseSelonCoordonees(xy);
-        System.out.println(caseSouhaitee) ; 
-         
+        System.out.println(caseSouhaitee); 
 
-        if ((caseSouhaitee != null) && (this.casesConstructbiles.contains(caseSouhaitee))) {
-            Point2D centreCase = caseSouhaitee.getCentre() ; 
-
+        if (caseSouhaitee != null && casesConstructbiles.contains(caseSouhaitee)) {
+            Point2D centreCase = caseSouhaitee.getCentre(); 
             t.drawVisuel(centreCase, caseSouhaitee.getTaille() / 3);
-            this.retirerCaseConstructible(caseSouhaitee);
+            retirerCaseConstructible(caseSouhaitee);
         }
+
     }
 
     // Fonction de test qui dessine un petit carré noir sur toute les cases constructbiles 
@@ -297,8 +268,8 @@ public class Carte extends ZoneCarte  {
         LinkedList<Case> casesConstructibles = this.casesConstructbiles ; 
 
         for (int i = 0 ; i < casesConstructibles.size() ; i ++){
-            int x = casesConstructibles.get(i).getCentre().getX() ; 
-            int y = casesConstructibles.get(i).getCentre().getY() ; 
+            double x = casesConstructibles.get(i).getCentre().getX() ; 
+            double y = casesConstructibles.get(i).getCentre().getY() ; 
 
             StdDraw.filledSquare(x, y, 10);
         }
@@ -309,8 +280,8 @@ public class Carte extends ZoneCarte  {
         LinkedList<Case> chemin = this.chemin ; 
 
         for (int i = 0 ; i < chemin.size() ; i ++){
-            int x = chemin.get(i).getCentre().getX() ; 
-            int y = chemin.get(i).getCentre().getY() ; 
+            double x = chemin.get(i).getCentre().getX() ; 
+            double y = chemin.get(i).getCentre().getY() ; 
 
             StdDraw.setPenColor(Color.PINK);
             StdDraw.filledSquare(x, y, 10);
