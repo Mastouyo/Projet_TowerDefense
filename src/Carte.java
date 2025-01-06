@@ -11,6 +11,7 @@ public class Carte extends ZoneCarte {
     private ArrayList<ArrayList<Case>> carte;
     private LinkedList<Case> casesConstructbiles;
     private LinkedList<Case> chemin;
+    private LinkedList<Tours> tours ;
 
     private double largeur = 350.0; 
     private double hauteur = 350.0;
@@ -22,6 +23,7 @@ public class Carte extends ZoneCarte {
         this.carte = chargerCarte();
         this.casesConstructbiles = initListeCasesConstructibles(); 
         this.chemin = initChemin(); 
+        this.tours=new LinkedList<>();
     }
 
     public String getFichier() {
@@ -118,6 +120,15 @@ public class Carte extends ZoneCarte {
             }
         }
         return casesConstructibles; 
+    }
+
+    public Case getCaseConstructible(double x, double y) {
+        for (Case c : this.casesConstructbiles) {
+            if (c.contains(x, y)) {
+                return c; 
+            }
+        }
+        return null; 
     }
 
     public LinkedList<Case> getCasesConstructibles() {
@@ -286,5 +297,27 @@ public class Carte extends ZoneCarte {
             StdDraw.setPenColor(Color.PINK);
             StdDraw.filledSquare(x, y, 10);
         }
+    }
+
+    public LinkedList<Point2D> convertitCheminPixel() {
+        LinkedList<Point2D> pixelList = new LinkedList<Point2D>();
+        double centerX = 350;
+        double centerY = 350;
+
+        for (Case c : chemin) {
+            double x = centerX + (c.getCentre().getX() - mapCenter.getX()) * tailleCase;
+            double y = centerY + (c.getCentre().getY() - mapCenter.getY()) * tailleCase;
+            pixelList.add(new Point2D(x, y));
+        }
+
+        return pixelList;
+    }
+
+    public void addTower(Tours t){
+        this.tours.add(t) ;
+    }
+
+    public LinkedList<Tours> getTowers(){
+        return this.tours ; 
     }
 }

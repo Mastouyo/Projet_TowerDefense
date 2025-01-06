@@ -13,6 +13,8 @@ public class Case {
         this.libre = true ; 
     }
 
+    
+
     public TypesCases getType(){
         return this.type ; 
     }
@@ -40,5 +42,9 @@ public class Case {
     @Override
     public String toString(){
         return "(" + this.type + ", " + "(" + this.centre.getX() + "," + this.centre.getY() + "))" ; 
+    }
+
+    public boolean contains(double x, double y){
+        return (x >= this.centre.getX() - this.taille/2 && x <= this.centre.getX() + this.taille/2 && y >= this.centre.getY() - this.taille/2 && y <= this.centre.getY() + this.taille/2) ;
     }
 }

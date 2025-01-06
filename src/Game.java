@@ -1,12 +1,11 @@
 import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.io.IOException;
 
 public class Game {
     private Player player; // Le joueur
     private InterfaceJeu uI; // Interface graphique du jeu
-    private List<Level> levels; // Liste des niveaux
+    private LinkedList<Level> levels; // Liste des niveaux
     private int currentLevelIndex; // Index du niveau actuel
     private LinkedList<Monstres> monstres; // Liste des monstres actifs
     private boolean gameRunning; // État du jeu
@@ -14,15 +13,71 @@ public class Game {
     public void launch() {
         init(); // Initialisation du jeu
         long previousTime = System.currentTimeMillis();
+        Tours selec = new Archer(); 
 
         while (isGameRunning()) {
             long currentTime = System.currentTimeMillis();
             double deltaTimeSec = (double) (currentTime - previousTime) / 1000;
             previousTime = currentTime;
-            update(deltaTimeSec); // Mise à jour du jeu
+
+            if (StdDraw.isMousePressed()) {
+                double mouseX = StdDraw.mouseX();
+                double mouseY = StdDraw.mouseY();
+
+                if (uI.getZoneBoutique().detecteTourClique(mouseX, mouseY) != null) {
+                    selec = uI.getZoneBoutique().detecteTourClique(mouseX, mouseY);
+                }
+
+                // Ajout des impressions de débogage
+                System.out.println("Tour sélectionnée: " + selec.getName());
+                System.out.println("Coût de la tour: " + selec.getCost());
+                System.out.println("Argent du joueur: " + player.getMoney());
+                System.out.println("Case constructible: " + levels.get(currentLevelIndex).getCarte().getCaseConstructible(mouseX, mouseY));
+                System.out.println("Instance de Tours: " + (selec instanceof Tours));
+
+                if ((selec.getCost() <= player.getMoney()) && 
+                    (levels.get(currentLevelIndex).getCarte().getCaseConstructible(mouseX, mouseY) != null) && 
+                    (selec instanceof Tours)) {
+
+                    Case c = levels.get(currentLevelIndex).getCarte().getCaseConstructible(mouseX, mouseY);
+                    Point2D centreCase = levels.get(currentLevelIndex).getCarte().getCaseConstructible(mouseX, mouseY).getCentre();
+                    Tours nouvelleTour = instanceTour(selec);
+                    nouvelleTour.setPosition(centreCase);
+                    //  levels.get(currentLevelIndex).getCarte().placerTour(nouvelleTour, centreCase);
+                    levels.get(currentLevelIndex).getCarte().addTower(nouvelleTour); // Add the tower to the map's list of towers
+                    levels.get(currentLevelIndex).getCarte().retirerCaseConstructible(c);
+
+                    player.acheterTour(selec);
+
+
+                    System.out.println("Tour placée avec succès");
+                }
+            }
+            update(deltaTimeSec,levels.get(currentLevelIndex).getCarte()); // Mise à jour du jeu
             render(); // Affichage du jeu
         }
         endGame(); // Fin du jeu
+    }
+ 
+    private Tours instanceTour(Tours sele){
+        if (sele instanceof Archer){
+            return new Archer() ; 
+        }
+        else if (sele instanceof EarthCaster){
+            return new EarthCaster() ; 
+        }
+        else if (sele instanceof FireCaster){
+            return new FireCaster() ; 
+        }
+        else if (sele instanceof WaterCaster){
+            return new WaterCaster() ; 
+        }
+        else if (sele instanceof WindCaster){
+            return new WindCaster() ; 
+        }
+        else {
+            return null ; 
+        }
     }
 
     private void init() {
@@ -41,7 +96,7 @@ public class Game {
 
             if (!levels.isEmpty()) {
                 // Création de l'interface du jeu avec le joueur et la carte du premier niveau
-                uI = new InterfaceJeu(player, levels.get(0).getCarte());
+                uI = new InterfaceJeu(player, levels.get(0).getCarte(), levels.get(0), levels, currentLevelIndex);
                 loadCurrentLevel(); // Charger le premier niveau
             }
 
@@ -56,6 +111,8 @@ public class Game {
         System.out.println("Chargement du niveau : " + (currentLevelIndex + 1));
         monstres.clear();
         currentLevel.resetWaves(); // Réinitialiser les vagues du niveau
+        uI.setCarte(currentLevel.getCarte());
+        uI.getZoneInfoJeu().update(currentLevel);
     }
 
     private boolean isGameRunning() {
@@ -70,12 +127,12 @@ public class Game {
         return gameRunning;
     }
 
-    private void update(double deltaTimeSec) {
+    private void update(double deltaTimeSec,Carte map) {
         Level currentLevel = levels.get(currentLevelIndex);
 
         // Mise à jour de la vague actuelle
         currentLevel.updateCurrentWave(deltaTimeSec);
-
+        
         // Ajouter les monstres nouvellement apparus
         LinkedList<Monstres> nouveauxMonstres = new LinkedList<>(currentLevel.getWaves().stream()
             .flatMap(wave -> wave.getActiveMonsters().stream())
@@ -91,9 +148,8 @@ public class Game {
 
         // Mise à jour des monstres
         monstres.forEach(monstre -> {
-            System.out.println("Position avant mise à jour : " + monstre.getPosition());
+            //System.out.println("Position avant mise à jour : " + monstre.getPosition());
             monstre.update(deltaTimeSec, player);
-
             // Vérifier si le monstre avance ou reste bloqué
             if (monstre.getChemin().isEmpty()) {
                 System.err.println("Erreur : Le chemin est vide pour le monstre " + monstre.getName());
@@ -109,14 +165,26 @@ public class Game {
                     System.out.println("- " + c.getCentre());
                 }
             }
-            System.out.println("Position après mise à jour : " + monstre.getPosition());
+            //System.out.println("Position après mise à jour : " + monstre.getPosition());
         });
-
+        
         // Retirer les monstres morts
-        monstres = monstres.stream().filter(Monstres::isAlive).collect(Collectors.toCollection(LinkedList::new));
+        
+        monstres = monstres.stream().filter(Monstres::isAlive).filter(Monstres :: isEnChemin).collect(Collectors.toCollection(LinkedList::new));
+        
 
+        if (monstres.isEmpty()) {
+            if (currentLevel.getCurrentWaveIndex() < currentLevel.getWaves().size()) {
+                currentLevel.getWaves().get(currentLevel.getCurrentWaveIndex()).setActiveMonsters(monstres);
+            } else {
+                System.out.println("Toutes les vagues du niveau ont été complétées !");
+            }
+        }
+        
+        
         // Si toutes les vagues du niveau sont terminées, passer au niveau suivant
-        if (currentLevel.allWavesComplete() && monstres.isEmpty()) {
+        if (currentLevel.allWavesComplete()) {
+            System.out.println("wave finie");
             currentLevelIndex++;
             if (currentLevelIndex < levels.size()) {
                 loadCurrentLevel(); // Charger le niveau suivant
@@ -127,6 +195,7 @@ public class Game {
             }
         }
 
+        
         // Mise à jour du joueur
         player.update(deltaTimeSec, monstres, currentLevel.getCarte());
     }
@@ -134,11 +203,17 @@ public class Game {
     private void render() {
         StdDraw.clear();
         uI.afficheJeu();
-
+    
         for (Monstres monstre : monstres) {
             monstre.render();
         }
-
+    
+        // Render towers on the map
+        for (Tours tour : levels.get(currentLevelIndex).getCarte().getTowers()) {
+            tour.drawVisuel(tour.getPosition(), 20);
+            
+        }
+    
         StdDraw.show();
     }
 
@@ -151,4 +226,6 @@ public class Game {
         }
         StdDraw.show();
     }
+
+
 }
